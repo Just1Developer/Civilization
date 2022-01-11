@@ -1,6 +1,6 @@
-package net.justonedeveloper.prvt.AI.HumanCivilisation;
+package net.justonedeveloper.prvt.AI.HumanCivilization;
 
-import net.justonedeveloper.prvt.AI.HumanCivilisation.enums.EnvironmentType;
+import net.justonedeveloper.prvt.AI.HumanCivilization.enums.EnvironmentType;
 
 import java.util.HashMap;
 

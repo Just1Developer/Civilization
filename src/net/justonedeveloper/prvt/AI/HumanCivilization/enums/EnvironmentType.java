@@ -1,4 +1,4 @@
-package net.justonedeveloper.prvt.AI.HumanCivilisation.enums;
+package net.justonedeveloper.prvt.AI.HumanCivilization.enums;
 
 import java.util.Random;
 
