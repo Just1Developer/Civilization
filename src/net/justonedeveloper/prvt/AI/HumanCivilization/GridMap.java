@@ -45,6 +45,15 @@ public class GridMap {
 		}
 	}
 	
+	public void alterPopulation(String Field, int amount) {
+		if(populationPerField.containsKey(Field)) {
+			amount += populationPerField.get(Field);
+		} else if(FieldExists(Field)) {
+			if(amount < 0) return;
+		} else return;
+		populationPerField.put(Field, amount);
+	}
+	
 	public boolean FieldExists(String Field) {
 		return (populationFields.containsKey(Field) || fields.containsKey(Field));
 	}

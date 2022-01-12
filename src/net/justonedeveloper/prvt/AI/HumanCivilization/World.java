@@ -4,6 +4,7 @@ import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.EnvironmentType;
 
 import java.util.Collection;
+import java.util.List;
 
 public class World {
 	
@@ -23,8 +24,8 @@ public class World {
 		grid = new GridMap(gridSize, env);
 	}
 	
-	public Collection<HumanEntity> getHumans() {
-		return HumanEntity.allHumans.values();
+	public List<HumanEntity> getHumans() {
+		return HumanEntity.allHumans;
 	}
 	
 	private void generate() {
