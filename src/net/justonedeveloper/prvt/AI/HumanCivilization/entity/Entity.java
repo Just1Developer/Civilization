@@ -2,10 +2,10 @@ package net.justonedeveloper.prvt.AI.HumanCivilization.entity;
 
 public class Entity {
 	
-	private String UUID = "";
+	private final String UUID = net.justonedeveloper.prvt.AI.HumanCivilization.enums.UUID.generate();
 	
 	public Entity() {
-		UUID = net.justonedeveloper.prvt.AI.HumanCivilization.enums.UUID.generate();
+		
 	}
 	
 	public String getUUID() {

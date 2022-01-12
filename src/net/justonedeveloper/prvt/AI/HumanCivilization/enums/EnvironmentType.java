@@ -2,8 +2,7 @@ package net.justonedeveloper.prvt.AI.HumanCivilization.enums;
 
 import java.util.Random;
 
-public enum EnvironmentType {
-	EMPTY, CAMP, VILLAGE, TOWN, CITY, BIG_CITY, BOOMING_CITY, MEGA_CITY, GODTIER_CITY,
+public enum EnvironmentType implements FieldType {
 	HOSTILE, FRIENDLY, NEUTRAL, ROTTEN;
 	
 	public static EnvironmentType getStartEnvironment() {
