@@ -16,14 +16,19 @@ public class GridMap {
 	public int Status = 0;
 	
 	public GridMap(int size, EnvironmentType LandScape) {
+		System.out.println("Generating GridMap...");
 		this.size = size;
+		Status = 1;
 		resetFieldsTo(fields, LandScape);
-		resetFieldsTo(fields, PopulationType.EMPTY);
+		resetFieldsTo(populationFields, PopulationType.EMPTY);
+		Status = 0;
+		System.out.println("GridMap generation complete.");
 	}
 	
 	private void resetFieldsTo(HashMap<String, FieldType> fields, FieldType e) {
 		fields.clear();
-		Status = 1;
+		System.out.println("Resetting Fields...");
+		if(Status == 0) Status = 2;
 		new Thread(new Runnable() {
 			public void run() {
 				for(int x = 0; x < size; x++) {
@@ -33,7 +38,7 @@ public class GridMap {
 				}
 			}
 		}).start();
-		Status = 0;
+		if(Status == 2) Status = 0;
 	}
 	
 	private void updatePopulationProperty(String Field) {

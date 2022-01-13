@@ -11,17 +11,18 @@ public class World {
 	public static World currentWorld;
 	
 	private EnvironmentType env;
-	private int gridSize;		//1000 ==> 1000x1000 different property grids
-	GridMap grid;
+	public int gridSize;		//1000 ==> 1000x1000 different property grids
+	public GridMap grid;
 	
-	public World() {
-		new World(1000);
+	public static World newWorld() {
+		return new World(1000);
 	}
 	public World(int size) {
 		currentWorld = this;
 		gridSize = size;
 		generate();
 		grid = new GridMap(gridSize, env);
+		System.out.println("GridMap set.");
 	}
 	
 	public List<HumanEntity> getHumans() {
