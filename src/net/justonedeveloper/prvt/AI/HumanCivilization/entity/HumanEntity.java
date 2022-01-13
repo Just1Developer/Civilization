@@ -1,5 +1,6 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization.entity;
 
+import net.justonedeveloper.prvt.AI.HumanCivilization.Civilization;
 import net.justonedeveloper.prvt.AI.HumanCivilization.GridMap;
 import net.justonedeveloper.prvt.AI.HumanCivilization.World;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.HumanProperty;
@@ -16,24 +17,24 @@ public class HumanEntity extends Entity {
 	
 	public static List<HumanEntity> allHumans = new ArrayList<HumanEntity>();
 	
-	public HumanEntity(World w, String StartField, int StartAmount) {
+	public HumanEntity(World w, String StartField, int StartAmount, int StartingAge) {
 		world = w;
-		addHuman(StartField, StartAmount);
+		addHuman(StartField, StartAmount, StartingAge);
 	}
-	public HumanEntity(World w, String[] StartFields, int[] StartAmounts) {
+	public HumanEntity(World w, String[] StartFields, int[] StartAmounts, int StartingAge) {
 		world = w;
 		for(int i = 0; i < StartFields.length; i++) {
-			addHuman(StartFields[i], StartAmounts[i]);
+			addHuman(StartFields[i], StartAmounts[i], StartingAge);
 		}
 	}
 	
-	public static HumanEntity newHuman(World w, String Field, int amount, HumanProperty[] props) {
+	public static HumanEntity newHuman(World w, String Field, int amount, HumanProperty[] props, int age) {
 		//if human exists, add to bodycount
 		HumanEntity h = HumanAlreadyExists(props);
 		if(h != null) {
-			return h.addHuman(Field, amount);
+			return h.addHuman(Field, amount, age);
 		} else {
-			return new HumanEntity(w, Field, amount).setProps(props);
+			return new HumanEntity(w, Field, amount, age).setProps(props);
 		}
 	}
 	
@@ -53,6 +54,7 @@ public class HumanEntity extends Entity {
 	
 	private int totalBodycount = 0;
 	private HashMap<String, Integer> bodycount = new HashMap<String, Integer>();
+	private HashMap<Integer, Integer> age = new HashMap<Integer, Integer>();		//<Age, Number of Population that age>
 	
 	//Begin Properties
 	
@@ -62,7 +64,6 @@ public class HumanEntity extends Entity {
 	private PopulationDensityPreference PrefDensity;
 	private int DensityMaxTolerance;			//In percent, ranges from 10% to 50%
 	private Profession profession;
-	private int age = 0;
 	
 	//End Properties
 	
@@ -71,24 +72,30 @@ public class HumanEntity extends Entity {
 	public PopulationPreference getPrefPopulation() {
 		return PrefPopulation;
 	}
+	public PopulationDensityPreference getPrefPopulationDensity() {
+		return PrefDensity;
+	}
 	public Profession getProfession() {
 		return profession;
-	}
-	public int getAge() {
-		return age;
 	}
 	
 	//End get Properties
 	
-	public HumanEntity addHuman(String Field, int amount) {
+	public HumanEntity addHuman(String Field, int amount, int age) {
 		if(World.currentWorld.getGridMap().FieldExists(Field)) {
 			int current = 0;
 			if(bodycount.containsKey(Field)) current = bodycount.get(Field);
 			
+			//
 			World.currentWorld.getGridMap().alterPopulation(Field, amount);
 			totalBodycount += amount;
 			bodycount.put(Field, current+amount);
 			
+			//Update Age List
+			int AgePpl = 0;
+			if(this.age.containsKey(age)) AgePpl = this.age.get(age);
+			AgePpl += amount;
+			this.age.put(age, AgePpl);
 		}
 		return this;
 	}
@@ -97,13 +104,14 @@ public class HumanEntity extends Entity {
 		if(World.currentWorld.getGridMap().FieldExists(Field)) {
 			int current = 0;
 			if(bodycount.containsKey(Field)) current = bodycount.get(Field);
-			
+			//TODO Alter amount by ppl alive on the Field
 			World.currentWorld.getGridMap().alterPopulation(Field, -amount);
 			totalBodycount -= amount;
 			bodycount.put(Field, current-amount);
 			
 			if(totalBodycount <= 0) {
-			
+				Civilization.deleteHumanEntity(this);
+				//or: totalBodycount = 0;
 			}
 		}
 		return this;

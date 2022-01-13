@@ -3,6 +3,8 @@ package net.justonedeveloper.prvt.AI.HumanCivilization;
 import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.Log;
 
+import java.util.HashMap;
+
 public class Civilization {
 	
 	static World primaryWorld;
@@ -11,7 +13,7 @@ public class Civilization {
 	
 	public static void main(String[] args) {
 		primaryWorld = new World();
-		HumanEntity h = new HumanEntity(primaryWorld, "500x500", 50);
+		HumanEntity h = new HumanEntity(primaryWorld, "500x500", 50, 25);
 		Log.log("UUID Print", h.getUUID());
 	}
 	
