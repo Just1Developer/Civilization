@@ -13,7 +13,7 @@ public class Civilization {
 	
 	//TODO: humans can build cities if architecht, humans split onto more fields if they can (camps or too many), Preferred Population Density
 	
-	public static void main(String[] args) {
+	public static void main1(String[] args) {
 		primaryWorld = World.newWorld();
 		try {
 			System.in.read();
@@ -37,6 +37,10 @@ public class Civilization {
 			}
 		}
 		
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("Test main method active, nothing is gonna happen here.");
 	}
 	
 	private boolean sim;

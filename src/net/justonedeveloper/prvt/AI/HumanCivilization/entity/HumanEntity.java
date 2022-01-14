@@ -101,6 +101,9 @@ public class HumanEntity extends Entity {
 	
 	//Start get Properties
 	
+	public HumanProperty[] getAllProps() {
+		return allProps;
+	}
 	public PopulationPreference getPrefPopulation() {
 		return PrefPopulation;
 	}
@@ -113,6 +116,10 @@ public class HumanEntity extends Entity {
 	
 	public int getPopulation() {
 		return totalBodycount;
+	}
+	public int getPopulation(String field) {
+		if(bodycount.containsKey(field)) return bodycount.get(field);
+		return 0;
 	}
 	
 	//End get Properties
