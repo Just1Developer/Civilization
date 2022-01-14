@@ -9,9 +9,9 @@ import java.util.HashMap;
 public class GridMap {
 	
 	private int size;		//SIZE IS EXCLUSIVE!
-	private HashMap<String, FieldType> fields = new HashMap<String, FieldType>();
-	private HashMap<String, FieldType> populationFields = new HashMap<String, FieldType>();
-	private HashMap<String, Integer> populationPerField = new HashMap<String, Integer>();
+	private HashMap<String, FieldType> fields = new HashMap<>();
+	private HashMap<String, FieldType> populationFields = new HashMap<>();
+	private HashMap<String, Integer> populationPerField = new HashMap<>();
 	
 	public int Status = 0;
 	
@@ -57,6 +57,29 @@ public class GridMap {
 			if(amount < 0) return;
 		} else return;
 		populationPerField.put(Field, amount);
+		if(populationPerField.get(Field) < 0) populationPerField.put(Field, 0);
+	}
+	
+	public String getNearestField(String Field, PopulationType populationMin, PopulationType populationMax) {
+		
+		int x_offset = 1, y_offset = 0, coordX = Integer.parseInt(Field.split("x")[0]), coordY = Integer.parseInt(Field.split("x")[1]), count = 0, max = size*size;
+		
+		while(count < max) {
+			
+			for(int iX = -1; iX < 2; iX++) {
+				for(int iY = -1; iY < 2; iY++) {
+					final String field = (coordX + (x_offset * iX)) + "x" + (coordY + (y_offset * iY));
+					if (FieldExists(field)) {
+						if(PopulationType.isInBounds(populationPerField.get(field), populationMin, populationMax)) return field;
+					}
+				}
+			}
+			if(y_offset < x_offset) y_offset++;
+			else x_offset++;
+			count++;
+			
+		}
+		return Field;
 	}
 	
 	public boolean FieldExists(String Field) {

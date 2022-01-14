@@ -63,6 +63,11 @@ public class HumanEntity extends Entity {
 			}
 		};
 		birth.run();
+		try {
+			birth.join();
+		} catch (InterruptedException e) {
+			birth.interrupt();
+		}
 		while (birth.isAlive()) {}
 		System.out.println("Birth Cycle Finished.");
 	}
@@ -80,8 +85,8 @@ public class HumanEntity extends Entity {
 	}
 	
 	private int totalBodycount = 0;
-	private HashMap<String, Integer> bodycount = new HashMap<String, Integer>();
-	private HashMap<Integer, Integer> age = new HashMap<Integer, Integer>();		//<Age, Number of Population that age>
+	private HashMap<String, Integer> bodycount = new HashMap<>();
+	private HashMap<Integer, Integer> age = new HashMap<>();		//<Age, Number of Population that age>
 	
 	//Begin Properties
 	
@@ -135,10 +140,34 @@ public class HumanEntity extends Entity {
 		if(World.currentWorld.getGridMap().FieldExists(Field)) {
 			int current = 0;
 			if(bodycount.containsKey(Field)) current = bodycount.get(Field);
-			//TODO Alter amount by ppl alive on the Field
+			
 			World.currentWorld.getGridMap().alterPopulation(Field, -amount);
 			totalBodycount -= amount;
-			bodycount.put(Field, current-amount);
+			if(bodycount.get(Field) <= amount) {
+				int rest = amount - bodycount.get(Field);
+				bodycount.put(Field, 0);
+				World.currentWorld.getGridMap().alterPopulation(Field, -(amount-rest));
+				while (rest > 0) {
+					String near = world.getGridMap().getNearestField(Field, null, null);
+					
+					if(near.equals(Field)) break;
+					
+					if(!bodycount.containsKey(near)) continue;
+					if(bodycount.get(near) >= rest) {
+						World.currentWorld.getGridMap().alterPopulation(Field, -rest);
+						bodycount.put(near, bodycount.get(near) - rest);
+						break;
+					} else {
+						World.currentWorld.getGridMap().alterPopulation(Field, -(bodycount.get(near)));
+						rest -= bodycount.get(near);
+						bodycount.put(near, 0);
+					}
+				}
+				//DONE: Kill of Humans in surrounding Field
+			} else {
+				bodycount.put(Field, current-amount);
+				World.currentWorld.getGridMap().alterPopulation(Field, -amount);
+			}
 			
 			if(totalBodycount <= 0) {
 				Civilization.deleteHumanEntity(this);
