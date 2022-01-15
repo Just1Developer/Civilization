@@ -37,7 +37,7 @@ public enum PopulationDensityPreference implements HumanProperty {
 		return value;
 	}
 
-	@Deprecated
+	/*@Deprecated
 	public static PopulationDensityPreference fromType(PopulationType type) {
 		switch (type) {
 			case EMPTY:
@@ -56,8 +56,9 @@ public enum PopulationDensityPreference implements HumanProperty {
 			default:
 				return UNLIMITED_DENS;
 		}
-	}
+	}*/
 
+	//Parse from Int
 	public static PopulationDensityPreference parsePref(int population) {
 		Object[] ob = map.keySet().toArray();
 		Arrays.sort(ob);
