@@ -12,7 +12,7 @@ public class World {
 	
 	private EnvironmentType env;
 	public int gridSize;		//1000 ==> 1000x1000 different property grids
-	public GridMap grid;
+	GridMap grid;
 	
 	public static World newWorld() {
 		return new World(1000);

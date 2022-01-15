@@ -81,6 +81,14 @@ public class GridMap {
 		}
 		return Field;
 	}
+
+	public int getFieldPopulation(String Field) {
+		if(!FieldExists(Field)) return 0;
+		if(!populationPerField.containsKey(Field)) {
+			populationPerField.put(Field, 0);
+			return 0;
+		} else return populationPerField.get(Field);
+	}
 	
 	public boolean FieldExists(String Field) {
 		return (populationFields.containsKey(Field) || fields.containsKey(Field));

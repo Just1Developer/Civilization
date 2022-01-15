@@ -1,7 +1,9 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization;
 
 import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
+import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.HumanProperty;
+import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.PopulationDensityPreference;
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.Log;
 
 import java.io.IOException;
@@ -41,6 +43,7 @@ public class Civilization {
 	
 	public static void main(String[] args) {
 		System.out.println("Test main method active, nothing is gonna happen here.");
+		System.out.println("PopulationDesPref of 4128: " + PopulationDensityPreference.parsePref(4128));
 	}
 	
 	private boolean sim;
