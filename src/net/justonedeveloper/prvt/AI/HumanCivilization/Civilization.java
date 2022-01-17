@@ -1,5 +1,6 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization;
 
+import net.justonedeveloper.prvt.AI.HumanCivilization.CityObject.CityNames;
 import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.HumanProperty;
@@ -16,6 +17,10 @@ public class Civilization {
 	//TODO: humans can build cities if architecht, humans split onto more fields if they can (camps or too many), Preferred Population Density
 	
 	public static void main1(String[] args) {
+		
+		//Initialization
+		CityNames.ini();
+		
 		primaryWorld = World.newWorld();
 		try {
 			System.in.read();
@@ -42,6 +47,10 @@ public class Civilization {
 	}
 	
 	public static void main(String[] args) {
+		
+		//Initialization
+		CityNames.ini();
+		
 		System.out.println("Test main method active, nothing is gonna happen here.");
 		System.out.println("PopulationDesPref of 4128: " + PopulationDensityPreference.parsePref(4128));
 	}
