@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class constants {
 	
-	public static int percBirthHigh = 40, percBirthLow = 55, percBirthRest = 0, tolerance = 5, percInherit = 70,
+	public static int percBirthHigh = 55, percBirthLow = 40, percBirthRest = 0, tolerance = 5, percInherit = 70,
 	minimumBirthAge = 25, maximumBirthAge = 48, minimumHighBirthAge = 30, maximumHighBirthAge = 38;
 	
 	static Random r = new Random();

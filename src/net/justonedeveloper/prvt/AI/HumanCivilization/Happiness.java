@@ -29,7 +29,10 @@ public class Happiness {
 		int FieldPopulation = Civilization.primaryWorld.getGridMap().getFieldPopulation(Field);
 		PopulationPreference FieldPopPref = PopulationPreference.fromType(PopulationType.parseType(FieldPopulation));
 
-
+		/**
+		 * Plan: Happiness starts at value 100
+		 * Categories
+		 */
 		
 		return 0;
 	}
