@@ -7,7 +7,7 @@ import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.Populatio
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.PopulationPreference;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.Profession;
 
-public class Happiness {
+public abstract class Happiness {
 
 	public static int calculate(String Field, HumanEntity human) { return calculate(Field, human.getAllProps());}
 	public static int calculate(String Field, HumanProperty[] props) {

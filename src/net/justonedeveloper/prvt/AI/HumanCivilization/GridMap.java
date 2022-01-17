@@ -25,6 +25,8 @@ public class GridMap {
 		System.out.println("GridMap generation complete.");
 	}
 	
+	public int getSize() { return size; }
+	
 	private void resetFieldsTo(HashMap<String, FieldType> fields, FieldType e) {
 		fields.clear();
 		System.out.println("Resetting Fields...");
