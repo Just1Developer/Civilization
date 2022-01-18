@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class CityObject {
 
-	public static ArrayList<CityObject> camps = new ArrayList<CityObject>();
+	public static ArrayList<CityObject> camps = new ArrayList<>();
 
 
 	//------------NON-STATIC CITY OBJECT------------
@@ -64,6 +64,9 @@ public class CityObject {
 				for(int iY = -1; iY < 2; iY++) {
 					final String field = (coordX + (x_offset * iX)) + "x" + (coordY + (y_offset * iY));
 					if (g.FieldExists(field)) {
+						
+						
+						
 						if(PopulationType.parseType(g.getFieldPopulation(field)) == CityType && !newFields.contains(field)) {
 							newFields.add(field);
 							fails = 0;
@@ -82,9 +85,5 @@ public class CityObject {
 		
 		fields = newFields;
 		return newFields;
-	}
-
-	public void upgrade() {
-	
 	}
 }

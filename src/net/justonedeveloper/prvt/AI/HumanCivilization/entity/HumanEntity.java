@@ -1,19 +1,19 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization.entity;
 
 import net.justonedeveloper.prvt.AI.HumanCivilization.Civilization;
-import net.justonedeveloper.prvt.AI.HumanCivilization.GridMap;
 import net.justonedeveloper.prvt.AI.HumanCivilization.World;
-import net.justonedeveloper.prvt.AI.HumanCivilization.constants;
+import net.justonedeveloper.prvt.AI.HumanCivilization.util.constants;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.HumanProperty;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.PopulationDensityPreference;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.PopulationPreference;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.Profession;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class HumanEntity extends Entity {
 	
-	public static List<HumanEntity> allHumans = new ArrayList<HumanEntity>();
+	public static List<HumanEntity> allHumans = new ArrayList<>();
 	
 	public static int totalPopulation() {
 		int humans = 0;
@@ -211,6 +211,30 @@ public class HumanEntity extends Entity {
 				else fieldIndex++;
 			}
 		}
+	}
+	
+	public void age() {
+		int[] ages = SortConvertAndReverse(age.keySet().toArray());
+		for(int c : ages) {		//c = current
+			age.put(c, age.get(c-1));
+			if(c > 0) continue;
+			age.put(0, 0);
+			break;
+		}
+	}
+	
+	private int[] SortConvertAndReverse(Object[] array) {
+		int[] conv = new int[array.length], conv2 = new int[array.length];
+		System.arraycopy(array, 0, conv, 0, array.length);
+		Arrays.sort(conv);
+		
+		int l = array.length-1;
+		
+		for(int i = 0; i <= l; i++) {
+			conv2[l-i] = conv[i];
+		}
+		
+		return conv2;
 	}
 	
 }

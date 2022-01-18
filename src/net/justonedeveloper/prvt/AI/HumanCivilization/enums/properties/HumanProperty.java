@@ -1,6 +1,6 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties;
 
-import net.justonedeveloper.prvt.AI.HumanCivilization.constants;
+import net.justonedeveloper.prvt.AI.HumanCivilization.util.constants;
 import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
 
 import java.util.ArrayList;
