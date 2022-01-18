@@ -13,9 +13,11 @@ import java.util.HashMap;
 public class Civilization {
 	
 	static World primaryWorld;
-	
-	//TODO: humans can build cities if architecht, humans split onto more fields if they can (camps or too many), Preferred Population Density
-	
+
+	/*
+	* TODO: humans can build cities if architecht, humans split onto more fields if they can (camps or too many), Preferred Population Density
+	*/
+
 	public static void main1(String[] args) {
 		
 		//Initialization

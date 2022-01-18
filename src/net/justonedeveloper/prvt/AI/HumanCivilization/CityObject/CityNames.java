@@ -42,11 +42,11 @@ public abstract class CityNames {
 			//Check if name was taken
 			if(!name.startsWith(newS)) break;
 		}
-		
+
 		//Now that we have at least 1 name, we get the shortest one
 		for(String n : names) {
 			if(n.equals(name)) continue;
-			if(n.split(" ").length < name.split(" ").length && !name.equals(" ")) name = n;
+			if(n.split(" ").length < name.split(" ").length && !n.equals(" ")) name = n;
 		}
 		
 		//Return new Name
