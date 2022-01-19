@@ -1,5 +1,7 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization.enums;
 
+import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.PopulationPreference;
+
 public enum PopulationType implements FieldType {
 	
 	EMPTY, CAMP, VILLAGE, TOWN, CITY, BIG_CITY, BOOMING_CITY, MEGA_CITY, GODTIER_CITY;
@@ -38,6 +40,9 @@ public enum PopulationType implements FieldType {
 			}
 		}
 		return (bmin && bmax);
+	}
+	public static boolean isInBounds(int population, PopulationType comparison, int[] bounds) {
+		return isInBounds(parseType(population), downgrade(comparison, bounds[0]), upgrade(comparison, bounds[1]));
 	}
 	
 	public static PopulationType parseType(int population) {
@@ -103,6 +108,22 @@ public enum PopulationType implements FieldType {
 			default:
 				return downgrade;
 		}
+	}
+
+	public static int offsetFrom(PopulationType pref, PopulationType Target) {
+		int res = trueOffsetFrom(pref, Target);
+		if(res < 0) return res*(-1);
+		return res;
+	}
+	public static int trueOffsetFrom(PopulationType pref, PopulationType Target) {
+		int indexPref = -1, indexTarget = -1;
+		for(int i = 0; i < ALL.length; i++) {
+			if(ALL[i] == pref) indexPref = i;
+			if(ALL[i] == Target) indexTarget = i;
+			if(indexPref >= 0 && indexTarget >= 0) break;
+		}
+		if(indexPref > indexTarget) return indexPref-indexTarget;
+		return (indexTarget-indexPref)*(-1);
 	}
 
 	/*

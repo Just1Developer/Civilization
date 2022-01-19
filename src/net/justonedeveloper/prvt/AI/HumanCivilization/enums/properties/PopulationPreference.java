@@ -3,7 +3,9 @@ package net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
 
 public enum PopulationPreference implements HumanProperty {
-	
+
+	//This is for how many people the entire CityObject has
+
 	LOW, MEDIUM, HIGH, EXTREME;
 	
 	public static PopulationPreference[] ALL = {LOW, MEDIUM, HIGH, EXTREME};

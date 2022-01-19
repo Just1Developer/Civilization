@@ -8,31 +8,45 @@ import java.util.ArrayList;
 
 public class CityObject {
 
-	public static ArrayList<CityObject> camps = new ArrayList<>();
+	public static ArrayList<CityObject> cityObjects = new ArrayList<>();
 
 
 	//------------NON-STATIC CITY OBJECT------------
 
 
-	private PopulationType CityType, minBound, maxBound;
+	private PopulationType CityType;
 	private ArrayList<String> fields = new ArrayList<>();
-	private int totalPopulation = 0, lowerTolerance, upperTolerance;
+	private int totalPopulation = 0;
+	private int[] bounds = {-1, 1};
 	private String CityName = "";
 
 	public CityObject(String startingField) {
-		fields.add(startingField);
+		create(startingField, -1, 1);
+	}
+	public CityObject(String startingField, int lowerBound, int upperBound) {
+		create(startingField, lowerBound, upperBound);
+	}
+	private void create(String field, int lowerBound, int upperBound) {
+		fields.add(field);
 		CityType = PopulationType.parseType(updatePopulation());
 		updateFields();
 		CityName = CityNames.genNewName();
+		setBounds(lowerBound, upperBound);
 	}
 	
 	//Start getAttributes
 	
 	public PopulationType getCityType() { return CityType; }
+	public int[] getTypeBounds() { return bounds; }
 	public String getCityName() { return CityName; }
 	
 	//End getAttributes
-	
+
+	public int[] setBounds(int lower, int upper) {
+		bounds[0] = lower; bounds[1] = upper;
+		return bounds;
+	}
+
 	public int updatePopulation() {
 		totalPopulation = 0;
 		for(String f : fields) {
@@ -64,9 +78,9 @@ public class CityObject {
 					final String field = (coordX + (x_offset * iX)) + "x" + (coordY + (y_offset * iY));
 					if (g.FieldExists(field)) {
 						
+						//2 Möglichkeiten: offsetFrom oder isInBounds -> inBounds
 						
-						
-						if(PopulationType.parseType(g.getFieldPopulation(field)) == CityType && !newFields.contains(field)) {
+						if(PopulationType.isInBounds(g.getFieldPopulation(field), CityType, bounds) && !newFields.contains(field)) {
 							newFields.add(field);
 							fails = 0;
 						} else fails++;

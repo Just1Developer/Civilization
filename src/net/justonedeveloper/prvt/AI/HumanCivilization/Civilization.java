@@ -1,14 +1,12 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization;
 
-import net.justonedeveloper.prvt.AI.HumanCivilization.CityObject.CityNames;
+import net.justonedeveloper.prvt.AI.HumanCivilization.object.CityNames;
 import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
-import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.HumanProperty;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.PopulationDensityPreference;
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.Log;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class Civilization {
 	
