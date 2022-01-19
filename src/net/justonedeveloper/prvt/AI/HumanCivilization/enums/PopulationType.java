@@ -46,5 +46,72 @@ public enum PopulationType implements FieldType {
 		}
 		return PopulationType.GODTIER_CITY;
 	}
+
+	public static PopulationType upgrade(PopulationType upgrade, int level) {
+		for(int i = 0; i < level; i++) {
+			upgrade = upgrade(upgrade);
+		}
+		return upgrade;
+	}
+	public static PopulationType upgrade(PopulationType upgrade) {
+		switch (upgrade) {
+			case EMPTY:
+				return CAMP;
+			case CAMP:
+				return VILLAGE;
+			case VILLAGE:
+				return TOWN;
+			case TOWN:
+				return CITY;
+			case CITY:
+				return BIG_CITY;
+			case BIG_CITY:
+				return BOOMING_CITY;
+			case BOOMING_CITY:
+				return MEGA_CITY;
+			case MEGA_CITY:
+				return GODTIER_CITY;
+			default:
+				return upgrade;
+		}
+	}
+
+	public static PopulationType downgrade(PopulationType downgrade, int level) {
+		for(int i = 0; i < level; i++) {
+			downgrade = downgrade(downgrade);
+		}
+		return downgrade;
+	}
+	public static PopulationType downgrade(PopulationType downgrade) {
+		switch (downgrade) {
+			case CAMP:
+				return EMPTY;
+			case VILLAGE:
+				return CAMP;
+			case TOWN:
+				return VILLAGE;
+			case CITY:
+				return TOWN;
+			case BIG_CITY:
+				return CITY;
+			case BOOMING_CITY:
+				return BIG_CITY;
+			case MEGA_CITY:
+				return BOOMING_CITY;
+			case GODTIER_CITY:
+				return MEGA_CITY;
+			default:
+				return downgrade;
+		}
+	}
+
+	/*
+	* Switch OHNE break;:
+	* switch (upgrade) {
+			case EMPTY -> {
+				return CAMP;
+			}
+		}
+	* */
 	
 }

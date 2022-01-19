@@ -1,4 +1,4 @@
-package net.justonedeveloper.prvt.AI.HumanCivilization.CityObject;
+package net.justonedeveloper.prvt.AI.HumanCivilization.object;
 
 import java.util.ArrayList;
 import java.util.List;

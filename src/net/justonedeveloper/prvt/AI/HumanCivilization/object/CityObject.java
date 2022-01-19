@@ -1,11 +1,9 @@
-package net.justonedeveloper.prvt.AI.HumanCivilization.CityObject;
+package net.justonedeveloper.prvt.AI.HumanCivilization.object;
 
-import net.justonedeveloper.prvt.AI.HumanCivilization.Civilization;
 import net.justonedeveloper.prvt.AI.HumanCivilization.GridMap;
 import net.justonedeveloper.prvt.AI.HumanCivilization.World;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class CityObject {
@@ -15,9 +13,10 @@ public class CityObject {
 
 	//------------NON-STATIC CITY OBJECT------------
 
-	private PopulationType CityType;
+
+	private PopulationType CityType, minBound, maxBound;
 	private ArrayList<String> fields = new ArrayList<>();
-	private int totalPopulation = 0;
+	private int totalPopulation = 0, lowerTolerance, upperTolerance;
 	private String CityName = "";
 
 	public CityObject(String startingField) {
