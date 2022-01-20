@@ -6,7 +6,9 @@ import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.UUID;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class CityObject {
 	
@@ -43,6 +45,7 @@ public class CityObject {
 		updateFields();
 		CityName = CityNames.genNewName();
 		setBounds(lowerBound, upperBound);
+		setExclude(true, true);
 	}
 	
 	//Start getAttributes
@@ -65,6 +68,40 @@ public class CityObject {
 		}
 		return totalPopulation;
 	}
+	
+	//Exclude Stuff
+	
+	private ArrayList<PopulationType> exclude = new ArrayList<>();
+	
+	public ArrayList<PopulationType> setExclude(boolean excludeEmpty, boolean overrideCurrent) {
+		if(excludeEmpty) setExclude(null, (ArrayList<PopulationType>) Arrays.asList(PopulationType.EMPTY), overrideCurrent);
+		else setExclude((ArrayList<PopulationType>) Arrays.asList(PopulationType.EMPTY), null, overrideCurrent);
+		return exclude;
+	}
+	public ArrayList<PopulationType> setExclude(PopulationType add, PopulationType remove, boolean overrideCurrent) {
+		setExclude((ArrayList<PopulationType>) Arrays.asList(add), (ArrayList<PopulationType>) Arrays.asList(remove), overrideCurrent);
+		return exclude;
+	}
+	public ArrayList<PopulationType> setExclude(PopulationType[] add, PopulationType[] remove, boolean overrideCurrent) {
+		setExclude((ArrayList<PopulationType>) Arrays.asList(add), (ArrayList<PopulationType>) Arrays.asList(remove), overrideCurrent);
+		return exclude;
+	}
+	public ArrayList<PopulationType> setExclude(ArrayList<PopulationType> add, ArrayList<PopulationType> remove, boolean overrideCurrent) {
+		if(overrideCurrent) exclude.clear();
+		if(add != null) {
+			for(PopulationType p : add) {
+				if(!exclude.contains(p)) exclude.add(p);
+			}
+		}
+		if(remove != null) {
+			for(PopulationType p : remove) {
+				if(exclude.contains(p)) exclude.remove(p);
+			}
+		}
+		return exclude;
+	}
+	
+	
 	
 	public ArrayList<String> updateFields() {
 		
@@ -93,7 +130,9 @@ public class CityObject {
 						
 						//2 Möglichkeiten: offsetFrom oder isInBounds -> inBounds
 						
-						if(PopulationType.isInBounds(g.getFieldPopulation(field), CityType, bounds) && !newFields.contains(field)) {
+						if(PopulationType.isInBounds(g.getFieldPopulation(field), CityType, bounds) && !newFields.contains(field) &&
+								!exclude.contains(PopulationType.parseType(g.getFieldPopulation(field)))) {
+							
 							//Check UUID
 							if(FieldBelonging.containsKey(field) && !FieldBelonging.get(field).equals(UUID)) fails++;
 							else {
@@ -101,6 +140,7 @@ public class CityObject {
 								FieldBelonging.put(field, UUID);
 								fails = 0;
 							}
+							
 						} else fails++;
 					}
 				}

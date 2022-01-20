@@ -17,8 +17,8 @@ public class HumanEntity extends Entity {
 	
 	public static int totalPopulation() {
 		int humans = 0;
-		for(HumanEntity h : allHumans) {
-			humans += h.getPopulation();
+		for(Iterator<HumanEntity> all = allHumans.iterator(); all.hasNext(); ) {
+			humans += all.next().getPopulation();
 		}
 		return humans;
 	}
@@ -63,6 +63,7 @@ public class HumanEntity extends Entity {
 			}
 		};
 		birth.run();
+		//Wait for thread to end
 		try {
 			birth.join();
 		} catch (InterruptedException e) {
