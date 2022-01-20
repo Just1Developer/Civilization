@@ -3,21 +3,31 @@ package net.justonedeveloper.prvt.AI.HumanCivilization.object;
 import net.justonedeveloper.prvt.AI.HumanCivilization.GridMap;
 import net.justonedeveloper.prvt.AI.HumanCivilization.World;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
+import net.justonedeveloper.prvt.AI.HumanCivilization.enums.UUID;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CityObject {
-
+	
+	public static HashMap<String, String> FieldBelonging = new HashMap<>();
 	public static ArrayList<CityObject> cityObjects = new ArrayList<>();
+	
+	public static ArrayList<String> diff(ArrayList<String> sample, ArrayList<String> control) {	//returns everything thats in the first arraylist but not the second
+		ArrayList<String> ret = new ArrayList<>();
+		
+		return ret;
+	}
 
 
 	//------------NON-STATIC CITY OBJECT------------
 
 
+	private String UUID;
 	private PopulationType CityType;
 	private ArrayList<String> fields = new ArrayList<>();
 	private int totalPopulation = 0;
-	private int[] bounds = {-1, 1};
+	private int[] bounds = new int[2];
 	private String CityName = "";
 
 	public CityObject(String startingField) {
@@ -27,6 +37,7 @@ public class CityObject {
 		create(startingField, lowerBound, upperBound);
 	}
 	private void create(String field, int lowerBound, int upperBound) {
+		UUID = net.justonedeveloper.prvt.AI.HumanCivilization.enums.UUID.generate();
 		fields.add(field);
 		CityType = PopulationType.parseType(updatePopulation());
 		updateFields();
@@ -60,6 +71,8 @@ public class CityObject {
 		String Field = fields.get(0);
 		GridMap g = World.currentWorld.getGridMap();
 		
+		ArrayList<String> fields_old = (ArrayList<String>) fields.clone();
+		
 		if(Field == null) return fields;
 		if(g == null) return fields;
 		
@@ -81,8 +94,13 @@ public class CityObject {
 						//2 Möglichkeiten: offsetFrom oder isInBounds -> inBounds
 						
 						if(PopulationType.isInBounds(g.getFieldPopulation(field), CityType, bounds) && !newFields.contains(field)) {
-							newFields.add(field);
-							fails = 0;
+							//Check UUID
+							if(FieldBelonging.containsKey(field) && !FieldBelonging.get(field).equals(UUID)) fails++;
+							else {
+								newFields.add(field);
+								FieldBelonging.put(field, UUID);
+								fails = 0;
+							}
 						} else fails++;
 					}
 				}
@@ -97,6 +115,18 @@ public class CityObject {
 		}
 		
 		fields = newFields;
+		
+		freeFields(diff(fields_old, fields));
+		
 		return newFields;
+	}
+	
+	private void freeFields(ArrayList<String> fields) {
+		for(String f : fields) {
+			if(this.fields.contains(f)) {
+				this.fields.remove(f);
+				FieldBelonging.remove(f);
+			}
+		}
 	}
 }
