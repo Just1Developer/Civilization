@@ -45,6 +45,9 @@ public class HumanEntity extends Entity {
 		}
 	}
 	private static HumanEntity HumanAlreadyExists(HumanProperty[] props) {
+
+		//TODO check for ConcurrentModificationException cause
+
 		for(HumanEntity h : allHumans) {
 			if(h.allProps.equals(props)) return h;
 		}
@@ -56,10 +59,10 @@ public class HumanEntity extends Entity {
 		Thread birth = new Thread() {
 			public void run() {
 				List<HumanEntity> humans = allHumans.subList(0, allHumans.size());
+				//for(Iterator<HumanEntity> h = allHumans.iterator(); h.hasNext(); ) {
 				for(HumanEntity h : humans) {
 					h.birth();
 				}
-				allHumans = humans;
 			}
 		};
 		birth.run();
@@ -186,6 +189,9 @@ public class HumanEntity extends Entity {
 	}
 	
 	public void birth() {
+
+		//TODO make sure this accesses nothing static [ConcurrentModificationException debug]
+
 		for(int cur : age.keySet()) {
 			int humans = 0;
 			

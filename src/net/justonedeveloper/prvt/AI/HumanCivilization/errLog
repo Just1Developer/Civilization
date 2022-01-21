@@ -1,0 +1,30 @@
+
+CURRENT ERRORS
+
+------------------------------------Newest error log [21.01.2022]------------------------------------
+
+        "C:\Program Files\Java\jdk-16.0.1\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2021.3\lib\idea_rt.jar=58846:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2021.3\bin" -Dfile.encoding=UTF-8 -classpath D:\Coding\Civilization\out\production\Cultivation_Simulator net.justonedeveloper.prvt.AI.HumanCivilization.Civilization
+        Generating GridMap...
+        Resetting Fields...
+        Resetting Fields...
+        GridMap generation complete.
+        GridMap set.
+
+        World: net.justonedeveloper.prvt.AI.HumanCivilization.World@568db2f2; Size: 1000; GridMap: net.justonedeveloper.prvt.AI.HumanCivilization.GridMap@378bf509
+        [21.01.22 | 13:16:42]   [UUID Print] RC6T1-QFBT5-W15ZX-4Z6MF-RHYKQ
+        Current Population: 50
+        Starting Birth Cycle
+        Birth Cycle Finished.
+
+        Current Population: 70
+        Starting Birth Cycle
+        Exception in thread "main" java.util.ConcurrentModificationException
+            at java.base/java.util.ArrayList$SubList$1.checkForComodification(ArrayList.java:1394)
+            at java.base/java.util.ArrayList$SubList$1.next(ArrayList.java:1298)
+            at net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity$1.run(HumanEntity.java:60)
+            at net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity.birthCycle(HumanEntity.java:65)
+            at net.justonedeveloper.prvt.AI.HumanCivilization.Civilization.main(Civilization.java:39)
+
+        Process finished with exit code 1
+
+-----------------------------------------------END OF LOG-----------------------------------------------
