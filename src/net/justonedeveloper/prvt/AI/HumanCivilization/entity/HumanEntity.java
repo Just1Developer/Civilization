@@ -56,23 +56,9 @@ public class HumanEntity extends Entity {
 	
 	public static void birthCycle() {
 		System.out.println("Starting Birth Cycle");
-		Thread birth = new Thread() {
-			public void run() {
-				List<HumanEntity> humans = allHumans.subList(0, allHumans.size());
-				//for(Iterator<HumanEntity> h = allHumans.iterator(); h.hasNext(); ) {
-				for(HumanEntity h : humans) {
-					h.birth();
-				}
-			}
-		};
-		birth.run();
-		//Wait for thread to end
-		try {
-			birth.join();
-		} catch (InterruptedException e) {
-			birth.interrupt();
+		for(Object h : allHumans.toArray()) {
+			((HumanEntity) h).birth();
 		}
-		while (birth.isAlive()) {}
 		System.out.println("Birth Cycle Finished.");
 	}
 	
@@ -205,6 +191,7 @@ public class HumanEntity extends Entity {
 			Object[] fields = bodycount.keySet().toArray();
 			int add = 5;
 			
+			//switch / case doesn't work with >=, just ==
 			if(humans >= 500) add = 20;
 			else if(humans >= 1000) add = 40;
 			else if(humans >= 5000) add = 100;

@@ -35,7 +35,7 @@ public class Civilization {
 		Log.log("UUID Print", h.getUUID());
 		
 		while (true) {
-			System.out.println("Current Population: " + HumanEntity.totalPopulation());
+			System.out.println("Current Population: " + HumanEntity.totalPopulation() + "; Total HumanEntites: " + HumanEntity.allHumans.size());
 			HumanEntity.birthCycle();
 			try {
 				System.in.read();
