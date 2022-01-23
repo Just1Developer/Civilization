@@ -31,12 +31,13 @@ public class Civilization {
 		System.out.println("World: " + primaryWorld + "; Size: " + primaryWorld.gridSize + "; GridMap: " + primaryWorld.grid);
 		while (primaryWorld.getGridMap().Status != 0) {} //Wait for Grid Generation
 		
-		HumanEntity h = HumanEntity.newHuman(primaryWorld, "500x500", 50, HumanProperty.generatePropertySet(null), 25);
+		HumanEntity h = HumanEntity.newHuman(primaryWorld, "500x500", 5000, HumanProperty.generatePropertySet(null), 25);
 		Log.log("UUID Print", h.getUUID());
 		
 		while (true) {
 			System.out.println("Current Population: " + HumanEntity.totalPopulation() + "; Total HumanEntites: " + HumanEntity.allHumans.size());
 			HumanEntity.birthCycle();
+			HumanEntity.advanceAge();
 			try {
 				System.in.read();
 			} catch (IOException e) {

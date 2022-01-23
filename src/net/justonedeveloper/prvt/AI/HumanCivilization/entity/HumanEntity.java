@@ -61,6 +61,13 @@ public class HumanEntity extends Entity {
 		}
 		System.out.println("Birth Cycle Finished.");
 	}
+	public static void advanceAge() {
+		System.out.println("Starting Ageing");
+		for(Object h : allHumans.toArray()) {
+			((HumanEntity) h).age();
+		}
+		System.out.println("Ageing Finished.");
+	}
 	
 	
 	
@@ -175,17 +182,20 @@ public class HumanEntity extends Entity {
 	}
 	
 	public void birth() {
-
-		//TODO make sure this accesses nothing static [ConcurrentModificationException debug]
-
+		
+		//DONE make sure this accesses nothing static [ConcurrentModificationException debug]
+		
 		for(int cur : age.keySet()) {
 			int humans = 0;
+			
+			if(age.get(cur) == null) continue;		//DONE why can this happen
 			
 			if(cur >= constants.minimumHighBirthAge && cur <= constants.maximumHighBirthAge) {
 				humans = constants.getBirthedPeople(age.get(cur), constants.percBirthHigh);
 			} else if(cur >= constants.minimumBirthAge && cur <= constants.maximumBirthAge) {
 				humans = constants.getBirthedPeople(age.get(cur), constants.percBirthLow);
 			}
+			System.out.println("Generating birth for age " + cur + " (" + age.get(cur) + ") + " + age.values());		//TODO age.values() == [0] --> WHY
 			
 			int fieldIndex = 0;
 			Object[] fields = bodycount.keySet().toArray();
@@ -210,7 +220,8 @@ public class HumanEntity extends Entity {
 	public void age() {
 		int[] ages = SortConvertAndReverse(age.keySet().toArray());
 		for(int c : ages) {		//c = current
-			age.put(c, age.get(c-1));
+			if(age.get(c-1) == null) age.put(c, 0);		//DONE Fixed why there can be null values
+			else age.put(c, age.get(c-1));
 			if(c > 0) continue;
 			age.put(0, 0);
 			break;
@@ -219,7 +230,14 @@ public class HumanEntity extends Entity {
 	
 	private int[] SortConvertAndReverse(Object[] array) {
 		int[] conv = new int[array.length], conv2 = new int[array.length];
-		System.arraycopy(array, 0, conv, 0, array.length);
+		
+		//System.arraycopy(array, 0, conv, 0, array.length);
+		//Above doesn't work, so I'm doing it manually
+		
+		for(int i = 0; i < array.length; i++) {
+			conv[i] = (Integer) array[i];
+		}
+		
 		Arrays.sort(conv);
 		
 		int l = array.length-1;
