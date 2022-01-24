@@ -64,8 +64,10 @@ public class HumanEntity extends Entity {
 	}
 	public static void advanceAge() {
 		System.out.println("Starting Ageing");
+		int i = 0;
 		for(Object h : allHumans.toArray()) {
-			((HumanEntity) h).age();
+			((HumanEntity) h).age(i < 3);
+			i++;
 		}
 		System.out.println("Ageing Finished.");
 	}
@@ -184,11 +186,6 @@ public class HumanEntity extends Entity {
 	
 	public void birth() {
 		
-		//DONE make sure this accesses nothing static [ConcurrentModificationException debug]
-		
-		Log.log("1", "Current Age KeySet: " + age.keySet());
-		Log.log("1", "Current Age ValueSet: " + age.values());
-		
 		for(int cur : age.keySet()) {
 			int humans = 0;
 			
@@ -199,9 +196,7 @@ public class HumanEntity extends Entity {
 			} else if(cur >= constants.minimumBirthAge && cur <= constants.maximumBirthAge) {
 				humans = constants.getBirthedPeople(age.get(cur), constants.percBirthLow);
 			}
-			Log.log("2", "Current Age KeySet: " + age.keySet());
-			Log.log("2", "Current Age ValueSet: " + age.values());
-			System.out.println("Generating birth for age " + cur + " (" + age.get(cur) + ") + " + age.values());		//TODO age.values() == [0] --> WHY
+			//System.out.println("Generating birth for age " + cur + " (" + age.get(cur) + ") + " + age.values());		//TODO age.values() == [0] --> WHY
 			
 			int fieldIndex = 0;
 			Object[] fields = bodycount.keySet().toArray();
@@ -214,45 +209,55 @@ public class HumanEntity extends Entity {
 			else if(humans >= 35000) add = 150;
 			else if(humans >= 150000) add = 350;
 			else if(humans >= 500000) add = 500;
-			Log.log("3", "Current Age KeySet: " + age.keySet());
-			Log.log("3", "Current Age ValueSet: " + age.values());
 			
 			for (int i = 0; i < humans; i+=add) {
 				newHuman(world, (String) fields[fieldIndex], add, HumanProperty.generatePropertySet(this), 0);
 				if(fieldIndex == fields.length-1) fieldIndex = 0;
 				else fieldIndex++;
 			}
-			Log.log("4", "Current Age KeySet: " + age.keySet());
-			Log.log("4", "Current Age ValueSet: " + age.values());
 		}
-		Log.log("5", "Current Age KeySet: " + age.keySet());
-		Log.log("5", "Current Age ValueSet: " + age.values());
 	}
 	
-	public void age() {
+	public void age(boolean log) {
 		int[] ages = SortConvertAndReverse(age.keySet().toArray());
-		Log.log("age-1", "Current Age KeySet: " + age.keySet());
+		if(log) {	Log.log("age-1", "Current Age KeySet: " + age.keySet());
 		Log.log("age-1", "Current Age ValueSet: " + age.values());
 		String agess = "[";
-		for(int i : ages) {
+		for (int i : ages) {
 			agess += ", " + i;
 		}
 		agess = agess.replaceFirst(", ", "") + "]";
 		Log.log("age-1", "Ages: " + agess);
-		int log = 0;
+	}
 		
 		for(int c : ages) {		//[25] | [5000]		//[25, 26] | [2500, 2500]
-		
+			/**
+			 * 1. Eigenen Wert kopieren und 1 höher Einfügen (vorher fehlend)
+			 * 2. Wert darunter nehmen und in die aktuelle Stelle einfügen (eig. unnötig, da vom letzen Schritt gedeckt.)
+			 * 3. Am Ende die "Neugeborenen" hinzufügen
+			*/
+			/*if(age.get(c+1) == null) <- UHM, WHY?? */ age.put(c+1, age.get(c));
+			if((age.get(c-1) == null || age.get(c-1) == 0) && c > 0) age.remove(c);		//If the age below doesn't exist, it won't be overridden in the next run, so we do it here
+			//if(age.get(c) == 0) age.remove(c);		//Remove unused
+			
+			/*
+			* Maybe following code, though I believe it's not of use:
+			* if(c > 0) continue;		//If it's not infants rn
+			* age.put(0,0);				//Set infants to 0 because they moved on to age 1 (does get covered above though)
+			* break;					//Because why not
+			* */
 		}
 		
+		/*		OLD FOR-LOOP
+		
 		for(int c : ages) {		//c = current
-			if(age.get(c-1) == null) age.put(c, 0);		//DONE Fixed why there can be null values
+			if(age.get(c-1) == null) age.put(c, 0);
+			else age.put(c, age.get(c-1));		//DONE Fixed why there can be null values
 			log++;
 			if(log < 2) {
 				Log.log("age-1-" + c, "Current Age KeySet: " + age.keySet());
 				Log.log("age-1-" + c, "Current Age ValueSet: " + age.values());
 			}
-			else age.put(c, age.get(c-1));
 			if(log < 2) {
 				Log.log("age-2-" + c, "Current Age KeySet: " + age.keySet());
 				Log.log("age-2-" + c, "Current Age ValueSet: " + age.values());
@@ -268,9 +273,9 @@ public class HumanEntity extends Entity {
 				Log.log("age-4-" + c, "Current Age ValueSet: " + age.values());
 			}
 			break;
-		}
-		Log.log("age-5", "Current Age KeySet: " + age.keySet());
-		Log.log("age-5", "Current Age ValueSet: " + age.values());
+		}*/
+		if(log) {Log.log("age-5", "Current Age KeySet: " + age.keySet());
+		Log.log("age-5", "Current Age ValueSet: " + age.values());}
 	}
 	
 	private int[] SortConvertAndReverse(Object[] array) {

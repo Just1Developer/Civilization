@@ -110,6 +110,55 @@ public class GridMap {
 		return ConvertToStringArray(f);
 	}
 	
+	//Get a cluster of Fields that have similar population
+	public String[] getFieldCluster(String Field, int tolerance) { return getFieldCluster(Field, tolerance, null); }
+	public String[] getFieldCluster(String Field, int tolerance, ArrayList<String> exclude) {
+		
+		ArrayList<String> fields = new ArrayList<>();
+		GridMap g = World.currentWorld.getGridMap();
+		
+		if(Field == null) return ConvertToStringArray(fields);
+		if(g == null) return ConvertToStringArray(fields);
+		if(exclude == null) exclude = new ArrayList<>();
+		
+		//variables
+		ArrayList<String> newFields = new ArrayList<>();
+		newFields.add(Field);
+		PopulationType CityType = PopulationType.parseType(getFieldPopulation(Field));
+		
+		//Integers
+		int x_offset = 1, y_offset = 0, coordX = Integer.parseInt(Field.split("x")[0]), coordY = Integer.parseInt(Field.split("x")[1]), count = 0, max = g.getSize()*g.getSize();
+		int fails = 0;		//Formula for Radius: pi*r² -> 3.5*x_offset*x_offset
+		
+		while(count < max) {
+			
+			for(int iX = -1; iX < 2; iX++) {
+				for(int iY = -1; iY < 2; iY++) {
+					final String field = (coordX + (x_offset * iX)) + "x" + (coordY + (y_offset * iY));
+					if (g.FieldExists(field)) {
+						
+						if(PopulationType.isInBounds(g.getFieldPopulation(field), CityType, new int[] {-tolerance, tolerance}) && !newFields.contains(field) &&
+								!exclude.contains(PopulationType.parseType(g.getFieldPopulation(field)))) {
+							
+							newFields.add(field);
+							fails = 0;
+							
+						} else fails++;
+					}
+				}
+			}
+			if(y_offset < x_offset) y_offset++;
+			else x_offset++;
+			
+			if(3.5*x_offset*x_offset <= fails) break;
+			
+			count++;
+			
+		}
+		
+		return ConvertToStringArray(newFields);
+	}
+	
 	public static String[] ConvertToStringArray(ArrayList<String> s) {
 		String[] n = new String[s.size()];
 		for(int i = 0; i < s.size(); i++) {

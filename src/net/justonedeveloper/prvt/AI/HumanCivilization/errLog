@@ -1,7 +1,40 @@
 
-CURRENT ERRORS
+CURRENT ERRORS/FAULT/FAILURES
 
-------------------------------------Newest error log [21.01.2022]------------------------------------
+------------------------------------------Error log [24.01.2022]------------------------------------------
+
+TITLE: Ageing doing weird stuff
+
+        Current Population: 28820; Total HumanEntites: 1192
+        Starting Birth Cycle
+        Birth Cycle Finished.
+        Starting Ageing
+        [24.01.22 | 23:33:51]   [age-1] Current Age KeySet: [35]
+        [24.01.22 | 23:33:51]   [age-1] Current Age ValueSet: [5000]
+        [24.01.22 | 23:33:51]   [age-1] Ages: [35]
+        [24.01.22 | 23:33:51]   [age-5] Current Age KeySet: [36]
+        [24.01.22 | 23:33:51]   [age-5] Current Age ValueSet: [5000]
+        [24.01.22 | 23:33:51]   [age-1] Current Age KeySet: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        [24.01.22 | 23:33:51]   [age-1] Current Age ValueSet: [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+        [24.01.22 | 23:33:51]   [age-1] Ages: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+        [24.01.22 | 23:33:51]   [age-5] Current Age KeySet: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        [24.01.22 | 23:33:51]   [age-5] Current Age ValueSet: [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+        [24.01.22 | 23:33:51]   [age-1] Current Age KeySet: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        [24.01.22 | 23:33:51]   [age-1] Current Age ValueSet: [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+        [24.01.22 | 23:33:51]   [age-1] Ages: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+        [24.01.22 | 23:33:51]   [age-5] Current Age KeySet: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        [24.01.22 | 23:33:51]   [age-5] Current Age ValueSet: [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+        Ageing Finished.
+
+        Process finished with exit code 130
+
+------------------------------------------------END OF LOG------------------------------------------------
+
+
+
+------------------------------------------Error log [21.01.2022]------------------------------------------
+
+TITLE: ConcurrentModificationException
 
         "C:\Program Files\Java\jdk-16.0.1\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2021.3\lib\idea_rt.jar=58846:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2021.3\bin" -Dfile.encoding=UTF-8 -classpath D:\Coding\Civilization\out\production\Cultivation_Simulator net.justonedeveloper.prvt.AI.HumanCivilization.Civilization
         Generating GridMap...
@@ -27,4 +60,4 @@ CURRENT ERRORS
 
         Process finished with exit code 1
 
------------------------------------------------END OF LOG-----------------------------------------------
+------------------------------------------------END OF LOG------------------------------------------------
