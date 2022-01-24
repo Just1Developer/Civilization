@@ -2,6 +2,7 @@ package net.justonedeveloper.prvt.AI.HumanCivilization.entity;
 
 import net.justonedeveloper.prvt.AI.HumanCivilization.Civilization;
 import net.justonedeveloper.prvt.AI.HumanCivilization.World;
+import net.justonedeveloper.prvt.AI.HumanCivilization.util.Log;
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.constants;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.HumanProperty;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.PopulationDensityPreference;
@@ -46,7 +47,7 @@ public class HumanEntity extends Entity {
 	}
 	private static HumanEntity HumanAlreadyExists(HumanProperty[] props) {
 
-		//TODO check for ConcurrentModificationException cause
+		//DONE check for ConcurrentModificationException cause
 
 		for(HumanEntity h : allHumans) {
 			if(h.allProps.equals(props)) return h;
@@ -185,6 +186,9 @@ public class HumanEntity extends Entity {
 		
 		//DONE make sure this accesses nothing static [ConcurrentModificationException debug]
 		
+		Log.log("1", "Current Age KeySet: " + age.keySet());
+		Log.log("1", "Current Age ValueSet: " + age.values());
+		
 		for(int cur : age.keySet()) {
 			int humans = 0;
 			
@@ -195,6 +199,8 @@ public class HumanEntity extends Entity {
 			} else if(cur >= constants.minimumBirthAge && cur <= constants.maximumBirthAge) {
 				humans = constants.getBirthedPeople(age.get(cur), constants.percBirthLow);
 			}
+			Log.log("2", "Current Age KeySet: " + age.keySet());
+			Log.log("2", "Current Age ValueSet: " + age.values());
 			System.out.println("Generating birth for age " + cur + " (" + age.get(cur) + ") + " + age.values());		//TODO age.values() == [0] --> WHY
 			
 			int fieldIndex = 0;
@@ -208,24 +214,63 @@ public class HumanEntity extends Entity {
 			else if(humans >= 35000) add = 150;
 			else if(humans >= 150000) add = 350;
 			else if(humans >= 500000) add = 500;
+			Log.log("3", "Current Age KeySet: " + age.keySet());
+			Log.log("3", "Current Age ValueSet: " + age.values());
 			
 			for (int i = 0; i < humans; i+=add) {
 				newHuman(world, (String) fields[fieldIndex], add, HumanProperty.generatePropertySet(this), 0);
 				if(fieldIndex == fields.length-1) fieldIndex = 0;
 				else fieldIndex++;
 			}
+			Log.log("4", "Current Age KeySet: " + age.keySet());
+			Log.log("4", "Current Age ValueSet: " + age.values());
 		}
+		Log.log("5", "Current Age KeySet: " + age.keySet());
+		Log.log("5", "Current Age ValueSet: " + age.values());
 	}
 	
 	public void age() {
 		int[] ages = SortConvertAndReverse(age.keySet().toArray());
+		Log.log("age-1", "Current Age KeySet: " + age.keySet());
+		Log.log("age-1", "Current Age ValueSet: " + age.values());
+		String agess = "[";
+		for(int i : ages) {
+			agess += ", " + i;
+		}
+		agess = agess.replaceFirst(", ", "") + "]";
+		Log.log("age-1", "Ages: " + agess);
+		int log = 0;
+		
+		for(int c : ages) {		//[25] | [5000]		//[25, 26] | [2500, 2500]
+		
+		}
+		
 		for(int c : ages) {		//c = current
 			if(age.get(c-1) == null) age.put(c, 0);		//DONE Fixed why there can be null values
+			log++;
+			if(log < 2) {
+				Log.log("age-1-" + c, "Current Age KeySet: " + age.keySet());
+				Log.log("age-1-" + c, "Current Age ValueSet: " + age.values());
+			}
 			else age.put(c, age.get(c-1));
+			if(log < 2) {
+				Log.log("age-2-" + c, "Current Age KeySet: " + age.keySet());
+				Log.log("age-2-" + c, "Current Age ValueSet: " + age.values());
+			}
 			if(c > 0) continue;
+			if(log < 2) {
+				Log.log("age-3-" + c, "Current Age KeySet: " + age.keySet());
+				Log.log("age-3-" + c, "Current Age ValueSet: " + age.values());
+			}
 			age.put(0, 0);
+			if(log < 2) {
+				Log.log("age-4-" + c, "Current Age KeySet: " + age.keySet());
+				Log.log("age-4-" + c, "Current Age ValueSet: " + age.values());
+			}
 			break;
 		}
+		Log.log("age-5", "Current Age KeySet: " + age.keySet());
+		Log.log("age-5", "Current Age ValueSet: " + age.values());
 	}
 	
 	private int[] SortConvertAndReverse(Object[] array) {

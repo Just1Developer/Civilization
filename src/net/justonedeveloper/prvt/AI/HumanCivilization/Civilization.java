@@ -34,6 +34,8 @@ public class Civilization {
 		HumanEntity h = HumanEntity.newHuman(primaryWorld, "500x500", 5000, HumanProperty.generatePropertySet(null), 25);
 		Log.log("UUID Print", h.getUUID());
 		
+		//primaryWorld.getGridMap().getAdjacentFields("500x500");		//To test if it works
+		
 		while (true) {
 			System.out.println("Current Population: " + HumanEntity.totalPopulation() + "; Total HumanEntites: " + HumanEntity.allHumans.size());
 			HumanEntity.birthCycle();

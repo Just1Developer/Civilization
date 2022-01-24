@@ -3,7 +3,10 @@ package net.justonedeveloper.prvt.AI.HumanCivilization;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.EnvironmentType;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.FieldType;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
+import net.justonedeveloper.prvt.AI.HumanCivilization.object.CityObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class GridMap {
@@ -82,6 +85,37 @@ public class GridMap {
 			
 		}
 		return Field;
+	}
+	
+	//Get Adjacent Fields
+	
+	public String[] getAdjacentFields(String Field) {
+		if(!FieldExists(Field)) return new String[0];
+		
+		ArrayList<String> f = new ArrayList<>();
+		for(int x = -1; x <= 1; x+=2) {
+			for(int y = -1; y <= 1; y+=2) {
+				if(FieldExists(x + "x" + y)) f.add(x + "x" + y);
+			}
+		}
+		return ConvertToStringArray(f);
+	}
+	public String[] getAdjacentFields(String[] Fields) {
+		ArrayList<String> f = new ArrayList<>(), fClone = (ArrayList<String>) Arrays.asList(Fields);
+		for(String field : Fields) {
+			for(String ad : getAdjacentFields(field)) {
+				if(!fClone.contains(ad) && !f.contains(ad)) f.add(ad);
+			}
+		}
+		return ConvertToStringArray(f);
+	}
+	
+	public static String[] ConvertToStringArray(ArrayList<String> s) {
+		String[] n = new String[s.size()];
+		for(int i = 0; i < s.size(); i++) {
+			n[i] = s.get(i);
+		}
+		return n;
 	}
 
 	public int getFieldPopulation(String Field) {
