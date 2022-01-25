@@ -50,7 +50,7 @@ public class HumanEntity extends Entity {
 		//DONE check for ConcurrentModificationException cause
 
 		for(HumanEntity h : allHumans) {
-			if(h.allProps.equals(props)) return h;
+			if(ArrayMatch(h.allProps, props)) return h;
 		}
 		return null;
 	}
@@ -63,13 +63,11 @@ public class HumanEntity extends Entity {
 		System.out.println("Birth Cycle Finished.");
 	}
 	public static void advanceAge() {
-		System.out.println("Starting Ageing");
-		int i = 0;
+		System.out.println("Starting Ageing Process");
 		for(Object h : allHumans.toArray()) {
-			((HumanEntity) h).age(i < 3);
-			i++;
+			((HumanEntity) h).age();
 		}
-		System.out.println("Ageing Finished.");
+		System.out.println("Ageing Process Finished.");
 	}
 	
 	
@@ -218,17 +216,8 @@ public class HumanEntity extends Entity {
 		}
 	}
 	
-	public void age(boolean log) {
+	public void age() {
 		int[] ages = SortConvertAndReverse(age.keySet().toArray());
-		if(log) {	Log.log("age-1", "Current Age KeySet: " + age.keySet());
-		Log.log("age-1", "Current Age ValueSet: " + age.values());
-		String agess = "[";
-		for (int i : ages) {
-			agess += ", " + i;
-		}
-		agess = agess.replaceFirst(", ", "") + "]";
-		Log.log("age-1", "Ages: " + agess);
-	}
 		
 		for(int c : ages) {		//[25] | [5000]		//[25, 26] | [2500, 2500]
 			/**
@@ -236,67 +225,57 @@ public class HumanEntity extends Entity {
 			 * 2. Wert darunter nehmen und in die aktuelle Stelle einfügen (eig. unnötig, da vom letzen Schritt gedeckt.)
 			 * 3. Am Ende die "Neugeborenen" hinzufügen
 			*/
-			/*if(age.get(c+1) == null) <- UHM, WHY?? */ age.put(c+1, age.get(c));
+			//For Debugging: Log.log("DEBUG", "Amount Humans with Age 0: " + age.get(0));
+
+			age.put(c+1, age.get(c));
 			if((age.get(c-1) == null || age.get(c-1) == 0) && c > 0) age.remove(c);		//If the age below doesn't exist, it won't be overridden in the next run, so we do it here
-			//if(age.get(c) == 0) age.remove(c);		//Remove unused
-			
-			/*
-			* Maybe following code, though I believe it's not of use:
-			* if(c > 0) continue;		//If it's not infants rn
-			* age.put(0,0);				//Set infants to 0 because they moved on to age 1 (does get covered above though)
-			* break;					//Because why not
-			* */
+			//Above: For remove unused
 		}
-		
-		/*		OLD FOR-LOOP
-		
-		for(int c : ages) {		//c = current
-			if(age.get(c-1) == null) age.put(c, 0);
-			else age.put(c, age.get(c-1));		//DONE Fixed why there can be null values
-			log++;
-			if(log < 2) {
-				Log.log("age-1-" + c, "Current Age KeySet: " + age.keySet());
-				Log.log("age-1-" + c, "Current Age ValueSet: " + age.values());
-			}
-			if(log < 2) {
-				Log.log("age-2-" + c, "Current Age KeySet: " + age.keySet());
-				Log.log("age-2-" + c, "Current Age ValueSet: " + age.values());
-			}
-			if(c > 0) continue;
-			if(log < 2) {
-				Log.log("age-3-" + c, "Current Age KeySet: " + age.keySet());
-				Log.log("age-3-" + c, "Current Age ValueSet: " + age.values());
-			}
-			age.put(0, 0);
-			if(log < 2) {
-				Log.log("age-4-" + c, "Current Age KeySet: " + age.keySet());
-				Log.log("age-4-" + c, "Current Age ValueSet: " + age.values());
-			}
-			break;
-		}*/
-		if(log) {Log.log("age-5", "Current Age KeySet: " + age.keySet());
-		Log.log("age-5", "Current Age ValueSet: " + age.values());}
 	}
-	
-	private int[] SortConvertAndReverse(Object[] array) {
+
+	//----------------------------------GENERAL STATIC METHODS----------------------------------
+
+	public static int CompareArrays(Object[] Array1, Object[] Array2) {
+		int match = 0, len = Array1.length;
+		if(Array2.length < Array1.length) len = Array2.length;	//Take length of shorter Array
+		for(int i = 0; i < len; i++) {
+			if(Array1[i].equals(Array2[i])) match++;
+		}
+		return match;
+	}
+
+	public static boolean ArrayMatch(Object[] Array1, Object[] Array2) {
+		return (CompareArrays(Array1, Array2) == Array1.length && Array1.length == Array2.length);	//Every item must match
+	}
+
+	public static String ArrayToString(Object[] a) {
+		String s = "[";
+		for(Object o : a) {
+			s += ", " + o;
+		}
+		s += "]";
+		return s.replaceFirst(", ", "");
+	}
+
+	public static int[] SortConvertAndReverse(Object[] array) {
 		int[] conv = new int[array.length], conv2 = new int[array.length];
-		
+
 		//System.arraycopy(array, 0, conv, 0, array.length);
 		//Above doesn't work, so I'm doing it manually
-		
+
 		for(int i = 0; i < array.length; i++) {
 			conv[i] = (Integer) array[i];
 		}
-		
+
 		Arrays.sort(conv);
-		
+
 		int l = array.length-1;
-		
+
 		for(int i = 0; i <= l; i++) {
 			conv2[l-i] = conv[i];
 		}
-		
+
 		return conv2;
 	}
-	
+
 }

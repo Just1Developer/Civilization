@@ -1,5 +1,6 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties;
 
+import net.justonedeveloper.prvt.AI.HumanCivilization.util.Log;
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.constants;
 import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
 
@@ -27,22 +28,24 @@ public interface HumanProperty {
 	}
 	
 	static HumanProperty[] generatePropertySet(HumanEntity parent) {
-		ArrayList<HumanProperty> list = new ArrayList<HumanProperty>();
+		HumanProperty[] props = new HumanProperty[3];
 		
 		//Profession
-		if(probability(constants.percInherit) && parent != null) list.add(parent.getProfession());
-		else list.add(getRandomProfession());
+		if(probability(constants.percInherit) && parent != null
+				&& parent.getProfession() != null) props[0] = parent.getProfession();
+		else props[0] = getRandomProfession();
+
 		//Population Preference
-		if(probability(constants.percInherit) && parent != null) list.add(parent.getPrefPopulation());
-		else list.add(getRandomPopulationPreference());
+		if(probability(constants.percInherit) && parent != null
+				&& parent.getPrefPopulation() != null) props[0] = parent.getPrefPopulation();
+		else props[1] = getRandomPopulationPreference();
+
 		//Population Density Preference
-		if(probability(constants.percInherit) && parent != null) list.add(parent.getPrefPopulationDensity());
-		else list.add(getRandomPopulationDensityPreference());
-		
-		HumanProperty[] props = new HumanProperty[list.size()];
-		for(int i = 0; i < list.size(); i++) {
-			props[i] = list.get(i);
-		}
+		if(probability(constants.percInherit) && parent != null
+				&& parent.getPrefPopulationDensity() != null) props[2] = parent.getPrefPopulationDensity();
+		else props[2] = getRandomPopulationDensityPreference();
+
+		//return properties
 		return props;
 	}
 	
