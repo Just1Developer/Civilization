@@ -100,11 +100,22 @@ public class GridMap {
 		}
 		return ConvertToStringArray(f);
 	}
-	public String[] getAdjacentFields(String[] Fields) {
-		ArrayList<String> f = new ArrayList<>(), fClone = (ArrayList<String>) Arrays.asList(Fields);
+	public String[] getAdjacentFields(String[] Fields) { return getAdjacentFields((ArrayList<String>) Arrays.asList(Fields)); };
+	public String[] getAdjacentFields(ArrayList<String> Fields) {
+		ArrayList<String> f = new ArrayList<>(), fClone = (ArrayList<String>) Fields.clone();
 		for(String field : Fields) {
 			for(String ad : getAdjacentFields(field)) {
 				if(!fClone.contains(ad) && !f.contains(ad)) f.add(ad);
+			}
+		}
+		return ConvertToStringArray(f);
+	}
+	public String[] getAdjacentFields(String[] Fields, int range) {
+		ArrayList<String> f = new ArrayList<>();
+		for(int i = 0; i < range; i++) {
+			String[] n = getAdjacentFields(f);
+			for(String n1 : n) {
+				if(!f.contains(n1)) f.add(n1);
 			}
 		}
 		return ConvertToStringArray(f);

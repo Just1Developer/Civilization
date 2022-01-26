@@ -233,6 +233,17 @@ public class HumanEntity extends Entity {
 		}
 	}
 
+	public String[] getFieldCluster(String field, int tolerance) {
+		return null;
+	}
+
+	public void spread(String field, double percent, int tolerance, int range /*How many fields max. it spreads*/) {
+		String[] fields = getFieldCluster(field, 0);
+		//Equalize inside in range of City Type (Don't change city type) (Add all, )
+		String[] adjacent = world.getGridMap().getAdjacentFields(fields, range);
+		//spread
+	}
+
 	//----------------------------------GENERAL STATIC METHODS----------------------------------
 
 	public static int CompareArrays(Object[] Array1, Object[] Array2) {
