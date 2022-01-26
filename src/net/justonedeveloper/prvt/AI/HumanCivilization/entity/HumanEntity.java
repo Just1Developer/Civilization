@@ -9,7 +9,6 @@ import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.Populatio
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.PopulationPreference;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.Profession;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class HumanEntity extends Entity {
@@ -36,13 +35,14 @@ public class HumanEntity extends Entity {
 		}
 	}
 	
-	public static HumanEntity newHuman(World w, String Field, int amount, HumanProperty[] props, int age) {
+	public static HumanEntity newHuman(World w, String Field, int amount, HumanProperty[] props, int age) {return newHuman(w, Field, amount, props, age, constants.randomDensityTolerance()); }
+	public static HumanEntity newHuman(World w, String Field, int amount, HumanProperty[] props, int age, int DensityTolerance) {
 		//if human exists, add to bodycount
 		HumanEntity h = HumanAlreadyExists(props);
 		if(h != null) {
 			return h.addHuman(Field, amount, age);
 		} else {
-			return new HumanEntity(w, Field, amount, age).setProps(props);
+			return new HumanEntity(w, Field, amount, age).setProps(props, DensityTolerance);
 		}
 	}
 	private static HumanEntity HumanAlreadyExists(HumanProperty[] props) {
@@ -84,8 +84,14 @@ public class HumanEntity extends Entity {
 	
 	
 	public World world;
-	public HumanEntity setProps(HumanProperty[] props) {
+	public HumanEntity setProps(HumanProperty[] props, int MaxDensityTolerance) {
 		allProps = props;
+		for(HumanProperty h : props) {
+			if(h instanceof Profession) profession = (Profession) h;
+			else if(h instanceof PopulationPreference) PrefPopulation = (PopulationPreference) h;
+			else if(h instanceof PopulationDensityPreference) PrefDensity = (PopulationDensityPreference) h;
+		}
+		if(MaxDensityTolerance <= constants.DensityToleranceMax && MaxDensityTolerance >= constants.DensityToleranceMin) DensityMaxTolerance = MaxDensityTolerance;
 		return this;
 	}
 	
@@ -97,10 +103,10 @@ public class HumanEntity extends Entity {
 	
 	private HumanProperty[] allProps;
 	
-	private PopulationPreference PrefPopulation;
-	private PopulationDensityPreference PrefDensity;
-	private int DensityMaxTolerance;			//In percent, ranges from 10% to 50%
-	private Profession profession;
+	private PopulationPreference PrefPopulation = HumanProperty.getRandomPopulationPreference();
+	private PopulationDensityPreference PrefDensity = HumanProperty.getRandomPopulationDensityPreference();
+	private int DensityMaxTolerance = constants.randomDensityTolerance();			//In percent, ranges from 10% to 50%
+	private Profession profession = HumanProperty.getRandomProfession();
 	
 	//End Properties
 	
@@ -151,7 +157,7 @@ public class HumanEntity extends Entity {
 	//Kill People on all Fields equally
 	public HumanEntity die(long amount) {
 		int index = 0, max = bodycount.size(); long rest = amount, amountPerRun;
-		String[] fields = bodycount.keySet().toArray(new String[bodycount.size()]);
+		String[] fields = bodycount.keySet().toArray(new String[0]);
 		
 		amountPerRun = Math.round(rest / max);
 		
