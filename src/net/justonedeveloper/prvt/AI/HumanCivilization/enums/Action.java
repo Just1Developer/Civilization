@@ -7,7 +7,8 @@ public enum Action {
 	MOVE, REPRODUCE, STAY;
 	
 	public static void Act(String Field, HumanEntity e) {
-		int happiness = Happiness.calculate(Field, e), population = e.getPopulation(Field);
+		int happiness = Happiness.calculate(Field, e);
+		long population = e.getPopulation(Field);
 		//TODO Method for how near something is to the actual value in enum order
 	}
 }

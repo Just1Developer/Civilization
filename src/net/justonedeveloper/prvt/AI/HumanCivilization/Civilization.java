@@ -7,6 +7,7 @@ import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.Populatio
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.Log;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class Civilization {
 	
@@ -35,7 +36,7 @@ public class Civilization {
 		Log.log("UUID Print", h.getUUID());
 		
 		//primaryWorld.getGridMap().getAdjacentFields("500x500");		//To test if it works
-		
+
 		while (true) {
 			System.out.println("Current Population: " + HumanEntity.totalPopulation() + "; Total HumanEntites: " + HumanEntity.allHumans.size());
 			HumanEntity.birthCycle();

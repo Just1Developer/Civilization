@@ -15,7 +15,7 @@ public class constants {
 		return false;
 	}
 	
-	public static int getBirthedPeople(int BirthPercentage, int totalHumans) {
+	public static long getBirthedPeople(long totalHumans, int BirthPercentage) {
 		double d = randomInt(BirthPercentage-tolerance, BirthPercentage+tolerance);
 		return (int) Math.round(totalHumans * (d / 100));
 	}

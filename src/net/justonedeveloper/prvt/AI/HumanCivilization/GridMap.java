@@ -14,7 +14,7 @@ public class GridMap {
 	private int size;		//SIZE IS EXCLUSIVE!
 	private HashMap<String, FieldType> fields = new HashMap<>();
 	private HashMap<String, FieldType> populationFields = new HashMap<>();
-	private HashMap<String, Integer> populationPerField = new HashMap<>();
+	private HashMap<String, Long> populationPerField = new HashMap<>();
 	
 	public int Status = 0;
 	
@@ -55,14 +55,14 @@ public class GridMap {
 		}
 	}
 	
-	public void alterPopulation(String Field, int amount) {
+	public void alterPopulation(String Field, long amount) {
 		if(populationPerField.containsKey(Field)) {
 			amount += populationPerField.get(Field);
 		} else if(FieldExists(Field)) {
 			if(amount < 0) return;
 		} else return;
 		populationPerField.put(Field, amount);
-		if(populationPerField.get(Field) < 0) populationPerField.put(Field, 0);
+		if(populationPerField.get(Field) < 0) populationPerField.put(Field, 0L);
 	}
 	
 	public String getNearestField(String Field, PopulationType populationMin, PopulationType populationMax) {
@@ -178,10 +178,10 @@ public class GridMap {
 		return n;
 	}
 
-	public int getFieldPopulation(String Field) {
+	public long getFieldPopulation(String Field) {
 		if(!FieldExists(Field)) return 0;
 		if(!populationPerField.containsKey(Field)) {
-			populationPerField.put(Field, 0);
+			populationPerField.put(Field, 0L);
 			return 0;
 		} else return populationPerField.get(Field);
 	}

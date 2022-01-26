@@ -27,7 +27,7 @@ public enum PopulationType implements FieldType {
 		return EMPTY;
 	}
 	
-	public static boolean isInBounds(int population, PopulationType min, PopulationType max) { return isInBounds(parseType(population), min, max); }
+	public static boolean isInBounds(long population, PopulationType min, PopulationType max) { return isInBounds(parseType(population), min, max); }
 	public static boolean isInBounds(PopulationType test, PopulationType min, PopulationType max) {
 		boolean bmin = (min == null), bmax = true, maxReached = false;
 		for(PopulationType p : ALL) {
@@ -41,11 +41,11 @@ public enum PopulationType implements FieldType {
 		}
 		return (bmin && bmax);
 	}
-	public static boolean isInBounds(int population, PopulationType comparison, int[] bounds) {
+	public static boolean isInBounds(long population, PopulationType comparison, int[] bounds) {
 		return isInBounds(parseType(population), downgrade(comparison, bounds[0]), upgrade(comparison, bounds[1]));
 	}
 	
-	public static PopulationType parseType(int population) {
+	public static PopulationType parseType(long population) {
 		for(int i = 0; i < bounds.length; i++) {
 			if(population <= bounds[i]) return ALL[i];
 		}

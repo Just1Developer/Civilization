@@ -26,7 +26,7 @@ public abstract class Happiness {
 			}
 		}
 
-		int FieldPopulation = Civilization.primaryWorld.getGridMap().getFieldPopulation(Field);
+		long FieldPopulation = Civilization.primaryWorld.getGridMap().getFieldPopulation(Field);
 		PopulationPreference FieldPopPref = PopulationPreference.fromType(PopulationType.parseType(FieldPopulation));
 
 		/**

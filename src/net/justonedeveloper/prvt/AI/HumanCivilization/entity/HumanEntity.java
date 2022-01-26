@@ -15,11 +15,12 @@ import java.util.*;
 public class HumanEntity extends Entity {
 	
 	public static List<HumanEntity> allHumans = new ArrayList<>();
+	private static Random r = new Random();
 	
 	public static int totalPopulation() {
 		int humans = 0;
-		for(Iterator<HumanEntity> all = allHumans.iterator(); all.hasNext(); ) {
-			humans += all.next().getPopulation();
+		for (HumanEntity allHuman : allHumans) {
+			humans += allHuman.getPopulation();
 		}
 		return humans;
 	}
@@ -69,6 +70,13 @@ public class HumanEntity extends Entity {
 		}
 		System.out.println("Ageing Process Finished.");
 	}
+	public static void spreadHumans() {
+		System.out.println("Starting Spreading Process");
+		for(Object h : allHumans.toArray()) {
+			((HumanEntity) h).spread();
+		}
+		System.out.println("Spreading Process Finished.");
+	}
 	
 	
 	
@@ -82,9 +90,9 @@ public class HumanEntity extends Entity {
 		return this;
 	}
 	
-	private int totalBodycount = 0;
-	private HashMap<String, Integer> bodycount = new HashMap<>();
-	private HashMap<Integer, Integer> age = new HashMap<>();		//<Age, Number of Population that age>
+	private long totalBodycount = 0;
+	private HashMap<String, Long> bodycount = new HashMap<>();
+	private HashMap<Integer, Long> age = new HashMap<>();		//<Age, Number of Population that age>
 	
 	//Begin Properties
 	
@@ -112,10 +120,10 @@ public class HumanEntity extends Entity {
 		return profession;
 	}
 	
-	public int getPopulation() {
+	public long getPopulation() {
 		return totalBodycount;
 	}
-	public int getPopulation(String field) {
+	public long getPopulation(String field) {
 		if(bodycount.containsKey(field)) return bodycount.get(field);
 		return 0;
 	}
@@ -124,7 +132,7 @@ public class HumanEntity extends Entity {
 	
 	public HumanEntity addHuman(String Field, int amount, int age) {
 		if(World.currentWorld.getGridMap().FieldExists(Field)) {
-			int current = 0;
+			long current = 0;
 			if(bodycount.containsKey(Field)) current = bodycount.get(Field);
 			
 			//
@@ -133,7 +141,7 @@ public class HumanEntity extends Entity {
 			bodycount.put(Field, current+amount);
 			
 			//Update Age List
-			int AgePpl = 0;
+			long AgePpl = 0;
 			if(this.age.containsKey(age)) AgePpl = this.age.get(age);
 			AgePpl += amount;
 			this.age.put(age, AgePpl);
@@ -143,14 +151,14 @@ public class HumanEntity extends Entity {
 	
 	public HumanEntity die(String Field, int amount) {
 		if(World.currentWorld.getGridMap().FieldExists(Field)) {
-			int current = 0;
+			long current = 0;
 			if(bodycount.containsKey(Field)) current = bodycount.get(Field);
 			
 			World.currentWorld.getGridMap().alterPopulation(Field, -amount);
 			totalBodycount -= amount;
 			if(bodycount.get(Field) <= amount) {
-				int rest = amount - bodycount.get(Field);
-				bodycount.put(Field, 0);
+				long rest = amount - bodycount.get(Field);
+				bodycount.put(Field, 0L);
 				World.currentWorld.getGridMap().alterPopulation(Field, -(amount-rest));
 				while (rest > 0) {
 					String near = world.getGridMap().getNearestField(Field, null, null);
@@ -165,7 +173,7 @@ public class HumanEntity extends Entity {
 					} else {
 						World.currentWorld.getGridMap().alterPopulation(Field, -(bodycount.get(near)));
 						rest -= bodycount.get(near);
-						bodycount.put(near, 0);
+						bodycount.put(near, 0L);
 					}
 				}
 				//DONE: Kill of Humans in surrounding Field
@@ -183,9 +191,11 @@ public class HumanEntity extends Entity {
 	}
 	
 	public void birth() {
-		
-		for(int cur : age.keySet()) {
-			int humans = 0;
+
+		int[] ages = SortConvert(age.keySet().toArray(), false);
+
+		for(int cur : ages) {
+			long humans = 0;
 			
 			if(age.get(cur) == null) continue;		//DONE why can this happen
 			
@@ -198,15 +208,16 @@ public class HumanEntity extends Entity {
 			
 			int fieldIndex = 0;
 			Object[] fields = bodycount.keySet().toArray();
-			int add = 5;
+			int add = randomInt(3, 8);
 			
 			//switch / case doesn't work with >=, just ==
-			if(humans >= 500) add = 20;
-			else if(humans >= 1000) add = 40;
-			else if(humans >= 5000) add = 100;
-			else if(humans >= 35000) add = 150;
-			else if(humans >= 150000) add = 350;
-			else if(humans >= 500000) add = 500;
+
+			if(humans >= 500000) add = randomInt(490, 510);
+			else if(humans >= 150000) add = randomInt(340, 360);
+			else if(humans >= 35000) add = randomInt(140, 160);
+			else if(humans >= 5000) add = randomInt(90, 110);
+			else if(humans >= 1000) add = randomInt(35, 45);
+			else if(humans >= 500) add = randomInt(15, 25);
 			
 			for (int i = 0; i < humans; i+=add) {
 				newHuman(world, (String) fields[fieldIndex], add, HumanProperty.generatePropertySet(this), 0);
@@ -217,7 +228,7 @@ public class HumanEntity extends Entity {
 	}
 	
 	public void age() {
-		int[] ages = SortConvertAndReverse(age.keySet().toArray());
+		int[] ages = SortConvert(age.keySet().toArray(), true);
 		
 		for(int c : ages) {		//[25] | [5000]		//[25, 26] | [2500, 2500]
 			/**
@@ -243,6 +254,9 @@ public class HumanEntity extends Entity {
 		String[] adjacent = world.getGridMap().getAdjacentFields(fields, range);
 		//spread
 	}
+	public void spread() {
+
+	}
 
 	//----------------------------------GENERAL STATIC METHODS----------------------------------
 
@@ -260,15 +274,15 @@ public class HumanEntity extends Entity {
 	}
 
 	public static String ArrayToString(Object[] a) {
-		String s = "[";
+		StringBuilder s = new StringBuilder("[");
 		for(Object o : a) {
-			s += ", " + o;
+			s.append(", ").append(o);
 		}
-		s += "]";
-		return s.replaceFirst(", ", "");
+		s.append("]");
+		return s.toString().replaceFirst(", ", "");
 	}
 
-	public static int[] SortConvertAndReverse(Object[] array) {
+	public static int[] SortConvert(Object[] array, boolean reverse) {
 		int[] conv = new int[array.length], conv2 = new int[array.length];
 
 		//System.arraycopy(array, 0, conv, 0, array.length);
@@ -280,6 +294,8 @@ public class HumanEntity extends Entity {
 
 		Arrays.sort(conv);
 
+		if(!reverse) return conv;
+
 		int l = array.length-1;
 
 		for(int i = 0; i <= l; i++) {
@@ -287,6 +303,10 @@ public class HumanEntity extends Entity {
 		}
 
 		return conv2;
+	}
+
+	public static int randomInt(int min, int max) {		//Both values inclusive
+		return r.nextInt(max - min + 1) + min;
 	}
 
 }
