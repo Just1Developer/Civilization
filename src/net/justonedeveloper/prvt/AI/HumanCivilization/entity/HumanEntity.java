@@ -159,6 +159,7 @@ public class HumanEntity extends Entity {
 			if(amountPerRun > rest) amountPerRun = rest;
 			
 			//Kill People
+			Log.log("KILL-DEBUG", "Killing " + amountPerRun + " People on Field " + fields[index]);
 			die(fields[index], amountPerRun);
 			rest -= amountPerRun;
 			
@@ -171,11 +172,17 @@ public class HumanEntity extends Entity {
 	}
 	public HumanEntity die(String Field, long amount) {
 		if(World.currentWorld.getGridMap().FieldExists(Field)) {
+			Log.log("KILL-DEBUG", "Field " + Field + " exists.");
 			long current = 0;
 			if(bodycount.containsKey(Field)) current = bodycount.get(Field);
+			Log.log("KILL-DEBUG", "long current = " + current);
 			
+			Log.log("KILL-DEBUG", "Altering Population: " + World.currentWorld.getGridMap().getFieldPopulation(Field));
 			World.currentWorld.getGridMap().alterPopulation(Field, -amount);
 			totalBodycount -= amount;
+			
+			Log.log("KILL-DEBUG", "Altered Population: " + World.currentWorld.getGridMap().getFieldPopulation(Field));
+			
 			if(bodycount.get(Field) <= amount) {
 				long rest = amount - bodycount.get(Field);
 				bodycount.put(Field, 0L);
@@ -293,7 +300,7 @@ public class HumanEntity extends Entity {
 		//spread
 	}
 	public void spread() {
-
+	
 	}
 
 }

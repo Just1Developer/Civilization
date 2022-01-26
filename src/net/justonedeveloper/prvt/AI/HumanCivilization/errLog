@@ -1,6 +1,34 @@
 
 CURRENT ERRORS/FAULT/FAILURES
 
+------------------------------------------Error log [26.01.2022]------------------------------------------
+
+TITLE: die() Method for killing off Humans does not work as intended
+
+        Starting Birth Cycle
+        Birth Cycle Finished.
+        Starting Ageing Process
+        Ageing Process Finished.
+        Generation: 49; Current Population: 66131; Total HumanEntites: 64
+
+        Starting Birth Cycle
+        Birth Cycle Finished.
+        Starting Ageing Process
+        [26.01.22 | 23:32:36]   [TESTING] 50 People succumbed to old age at rate 1 (Age 75 | Total before: 5000)
+        [26.01.22 | 23:32:36]   [KILL-DEBUG] Killing 50 People on Field 500x500
+        [26.01.22 | 23:32:36]   [KILL-DEBUG] Field 500x500 exists.
+        [26.01.22 | 23:32:36]   [KILL-DEBUG] long current = 6000
+        [26.01.22 | 23:32:36]   [KILL-DEBUG] Altering Population: 71891
+        [26.01.22 | 23:32:36]   [KILL-DEBUG] Altered Population: 71841
+        Ageing Process Finished.
+        Generation: 50; Current Population: 71841; Total HumanEntites: 64
+
+        Process finished with exit code 130
+
+------------------------------------------------END OF LOG------------------------------------------------
+
+
+
 ------------------------------------------Error log [24.01.2022]------------------------------------------
 
 TITLE: Ageing doing weird stuff
