@@ -75,7 +75,9 @@ public class GridMap {
 				for(int iY = -1; iY < 2; iY++) {
 					final String field = (coordX + (x_offset * iX)) + "x" + (coordY + (y_offset * iY));
 					if (FieldExists(field)) {
-						if(PopulationType.isInBounds(populationPerField.get(field), populationMin, populationMax)) return field;
+						if(!populationPerField.containsKey(field)) {
+							if(PopulationType.isInBounds(0, populationMin, populationMax)) return field;
+						} else if(PopulationType.isInBounds(populationPerField.get(field), populationMin, populationMax)) return field;
 					}
 				}
 			}

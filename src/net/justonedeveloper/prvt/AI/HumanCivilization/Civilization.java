@@ -36,11 +36,14 @@ public class Civilization {
 		Log.log("UUID Print", h.getUUID());
 		
 		//primaryWorld.getGridMap().getAdjacentFields("500x500");		//To test if it works
-
+		
+		int generation = 1;
+		
 		while (true) {
-			System.out.println("Current Population: " + HumanEntity.totalPopulation() + "; Total HumanEntites: " + HumanEntity.allHumans.size());
 			HumanEntity.birthCycle();
 			HumanEntity.advanceAge();
+			System.out.println("Generation: " + generation + "; Current Population: " + HumanEntity.totalPopulation() + "; Total HumanEntites: " + HumanEntity.allHumans.size());
+			generation++;
 			try {
 				System.in.read();
 			} catch (IOException e) {
