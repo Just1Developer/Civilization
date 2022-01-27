@@ -7,6 +7,8 @@ import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.Populatio
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.PopulationPreference;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.Profession;
 
+import java.util.ArrayList;
+
 public abstract class Happiness {
 
 	public static int calculate(String Field, HumanEntity human) { return calculate(Field, human.getAllProps());}
@@ -35,6 +37,14 @@ public abstract class Happiness {
 		 */
 		
 		return 0;
+	}
+
+	public static boolean isInBounds(PopulationPreference current, String Field, int tolerance) { return isInBounds(current, World.currentWorld.getGridMap().getFieldPopulation(Field), tolerance); }
+	public static boolean isInBounds(PopulationPreference current, long FieldPopulation, int tolerance) {
+
+
+
+		return false;
 	}
 
 }

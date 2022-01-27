@@ -74,6 +74,5 @@ public class Civilization {
 	
 	public static void deleteHumanEntity(HumanEntity del) {
 		if(HumanEntity.allHumans.contains(del)) HumanEntity.allHumans.remove(del);
-		del = null;
 	}
 }
