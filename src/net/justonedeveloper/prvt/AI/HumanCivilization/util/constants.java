@@ -7,7 +7,8 @@ public class constants {
 	public static final int percBirthHigh = 4, percBirthLow = 3, tolerance = 5, percInherit = 70,		//Actually, Birth rate ~100% / 30 years ~= 3%
 	minimumBirthAge = 25, maximumBirthAge = 48, minimumHighBirthAge = 30, maximumHighBirthAge = 38,
 	dieOfAgeLvl1 = 75, dieOfAgeLvl2 = 85, dieOfAgeLvl3 = 100, maxAge = 120,
-	DensityToleranceMin = 10, DensityToleranceMax = 70;
+	DensityToleranceMin = 10, DensityToleranceMax = 70,
+	HumanSpreadPercentage = 20;
 	
 	/**
 	 * Death Probablilties
@@ -36,6 +37,9 @@ public class constants {
 	}
 	public static long getDeadPeople(long totalHumans, int DeathPercentage) {
 		return (int) Math.round(totalHumans * ((double) DeathPercentage / 100));
+	}
+	public static long getPeopleOf(long totalHumans, int percent) {
+		return (int) Math.round(totalHumans * ((double) percent / 100));
 	}
 	
 	public static int randomInt(int min, int inclusiveMax) {

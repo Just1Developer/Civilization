@@ -1,5 +1,6 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization;
 
+import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.EnvironmentType;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.FieldType;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
@@ -51,7 +52,30 @@ public class GridMap {
 			Field = Field + "x" + Field;
 		}
 		if(populationFields.containsKey(Field)) {
-			PopulationType.evaluate();
+			PopulationType.evaluate();																					//TODO EVALUATE METHOD
+		}
+	}
+	
+	public void refreshPopulation(String[] Fields) {
+		for(String f : Fields) {
+			refreshPopulation(f);
+		}
+	}
+	public void refreshPopulation(ArrayList<String> Fields) {
+		for(String f : Fields) {
+			refreshPopulation(f);
+		}
+	}
+	public void refreshPopulation(String Field) {
+		if(!Field.contains("x")) {
+			Field = Field + "x" + Field;
+		}
+		if(FieldExists(Field)) {
+			long pop = 0;
+			for(HumanEntity h : HumanEntity.allHumans) {
+				pop += h.getPopulation(Field);
+			}
+			populationPerField.put(Field, pop);
 		}
 	}
 	

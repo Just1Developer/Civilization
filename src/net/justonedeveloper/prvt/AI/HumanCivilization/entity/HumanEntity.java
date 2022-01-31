@@ -1,7 +1,9 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization.entity;
 
 import net.justonedeveloper.prvt.AI.HumanCivilization.Civilization;
+import net.justonedeveloper.prvt.AI.HumanCivilization.GridMap;
 import net.justonedeveloper.prvt.AI.HumanCivilization.World;
+import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.Log;
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.constants;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.HumanProperty;
@@ -96,8 +98,8 @@ public class HumanEntity extends Entity {
 	}
 	
 	private long totalBodycount = 0;
-	private HashMap<String, Long> bodycount = new HashMap<>();
-	private HashMap<Integer, Long> age = new HashMap<>();		//<Age, Number of Population that age>
+	private final HashMap<String, Long> bodycount = new HashMap<>();
+	private final HashMap<Integer, Long> age = new HashMap<>();		//<Age, Number of Population that age>
 	
 	//Begin Properties
 	
@@ -155,7 +157,7 @@ public class HumanEntity extends Entity {
 	}
 	
 	//Kill People on all Fields equally
-	public HumanEntity dieOfAge(long amount, int age/*, boolean killRest If the method should kill more if */) {
+	public void dieOfAge(long amount, int age/*, boolean killRest If the method should kill more if */) {
 		/*if(killRest) {
 			long rest = amount, currentPeople = this.age.get(age);
 			int offset = 0;
@@ -171,13 +173,12 @@ public class HumanEntity extends Entity {
 			if(this.age.get(age) <= amount) this.age.remove(age);
 			else this.age.put(age, this.age.get(age) - amount);
 //		}
-		return this;
 	}
-	public HumanEntity die(long amount) {
+	public void die(long amount) {
 		int index = 0, max = bodycount.size(); long rest = amount, amountPerRun;
 		String[] fields = bodycount.keySet().toArray(new String[0]);
 		
-		amountPerRun = Math.round(rest / max);
+		amountPerRun = rest / max;																						//TODO removed Math.round, check if it still works
 		
 		while (rest > 0 && totalBodycount > 0) {
 			if(amountPerRun > rest) amountPerRun = rest;
@@ -191,10 +192,8 @@ public class HumanEntity extends Entity {
 			if(index < max-1) index++;
 			else index = 0;
 		}
-		
-		return this;
 	}
-	public HumanEntity die(String Field, long amount) {
+	public void die(String Field, long amount) {
 		if(World.currentWorld.getGridMap().FieldExists(Field)) {
 			long current = 0;
 			if(bodycount.containsKey(Field)) current = bodycount.get(Field);
@@ -233,7 +232,6 @@ public class HumanEntity extends Entity {
 				//or: totalBodycount = 0;
 			}
 		}
-		return this;
 	}
 	
 	public void birth() {
@@ -277,10 +275,10 @@ public class HumanEntity extends Entity {
 		int[] ages = SortConvert(age.keySet().toArray(), true);
 		
 		for(int c : ages) {		//[25] | [5000]		//[25, 26] | [2500, 2500]
-			/**
-			 * 1. Eigenen Wert kopieren und 1 höher Einfügen (vorher fehlend)
-			 * 2. Wert darunter nehmen und in die aktuelle Stelle einfügen (eig. unnötig, da vom letzen Schritt gedeckt.)
-			 * 3. Am Ende die "Neugeborenen" hinzufügen
+			/*
+			  1. Eigenen Wert kopieren und 1 höher Einfügen (vorher fehlend)
+			  2. Wert darunter nehmen und in die aktuelle Stelle einfügen (eig. unnötig, da vom letzen Schritt gedeckt.)
+			  3. Am Ende die "Neugeborenen" hinzufügen
 			*/
 
 			age.put(c+1, age.get(c));
@@ -306,22 +304,147 @@ public class HumanEntity extends Entity {
 			dieOfAge(dead, a);
 		}
 	}
-
-	public String[] getFieldCluster(String field, int tolerance) {
-		long pop = world.getGridMap().getFieldPopulation(field);
+	
+	public String[] getFieldCluster(String field, int tolerance) { return getFieldCluster(field, new int[] {-tolerance, tolerance}, null); }
+	public String[] getFieldCluster(String field, int[] tolerance) { return getFieldCluster(field, tolerance, null); }
+	public String[] getFieldCluster(String field, int tolerance, ArrayList<PopulationType> exclude) { return getFieldCluster(field, new int[] {-tolerance, tolerance}, exclude); }
+	public String[] getFieldCluster(String Field, int[] tolerance, ArrayList<PopulationType> exclude) {
+		ArrayList<String> fields = new ArrayList<>();
+		GridMap g = World.currentWorld.getGridMap();
 		
-		return null;
+		if(Field == null) return ConvertToStringArray(fields);
+		if(g == null) return ConvertToStringArray(fields);
+		if(exclude == null) exclude = new ArrayList<>();
+		
+		//variables
+		ArrayList<String> newFields = new ArrayList<>();
+		newFields.add(Field);
+		PopulationType popType = PopulationType.parseType(bodycount.get(Field));
+		
+		//Integers
+		int x_offset = 1, y_offset = 0, coordX = Integer.parseInt(Field.split("x")[0]), coordY = Integer.parseInt(Field.split("x")[1]), count = 0, max = g.getSize()*g.getSize();
+		int fails = 0;		//Formula for Radius: pi*r² -> 3.5*x_offset*x_offset
+		
+		while(count < max) {
+			
+			for(int iX = -1; iX < 2; iX++) {
+				for(int iY = -1; iY < 2; iY++) {
+					final String field = (coordX + (x_offset * iX)) + "x" + (coordY + (y_offset * iY));
+					if (g.FieldExists(field)) {
+						
+						if(PopulationType.isInBounds(g.getFieldPopulation(field), popType, tolerance) && !newFields.contains(field) &&
+								!exclude.contains(PopulationType.parseType(g.getFieldPopulation(field)))) {
+							
+							newFields.add(field);
+							fails = 0;
+							
+						} else fails++;
+					}
+				}
+			}
+			if(y_offset < x_offset) y_offset++;
+			else x_offset++;
+			
+			if(3.5*x_offset*x_offset <= fails) break;
+			
+			count++;
+			
+		}
+		String[] converted = ConvertToStringArray(newFields);
+		Arrays.sort(converted);					//so Clusters are always sorted the same
+		return converted;
 	}
 
-	public void spread(String field, double percent, int tolerance, int range /*How many fields max. it spreads*/) {
+	public ArrayList<String>[] spread(String field, int percent, int range /*How many fields max. it spreads*/, boolean updateAffectedFields) {
+		ArrayList<String> affectedFields = new ArrayList<>(), affectedFieldsDirect = new ArrayList<>(), affectedFieldsFar = new ArrayList<>();
 		String[] fields = getFieldCluster(field, 0);
-		//Equalize inside in range of City Type (Don't change city type) (Add all, )
 		String[] adjacent = world.getGridMap().getAdjacentFields(fields, range);
 		int currentFieldsSize = fields.length, adjacentSize = adjacent.length;
+		
+		//Equalize inside in range of City Type (Don't change city type) (Add all, )
+		long totalInnerPop = 0, newPerField, rest;
+		//Calculate Total Population
+		for(String f : fields) {
+			totalInnerPop += getPopulation(f);
+		}
+		//Divide up and add the rest to the OG Field (can't risk errors in Property calculation)
+		newPerField = totalInnerPop / currentFieldsSize;
+		while(newPerField * currentFieldsSize > totalInnerPop) { newPerField--; }
+		rest = totalInnerPop - (newPerField * currentFieldsSize);
+		
+		for(String f : fields) {
+			bodycount.put(f, newPerField);
+			affectedFields.add(f);
+			affectedFieldsDirect.add(f);
+		}
+		bodycount.put(field, newPerField + rest);
+		
 		//spread
+		long totalMoving = constants.getPeopleOf(totalInnerPop, percent);
+		
+		//Copied Algorithm from above; if something doesn't work the error might be here
+		//Divide up and add the rest to the OG Field (can't risk errors in Property calculation) (dont care)
+		newPerField = totalMoving / adjacentSize;
+		while(newPerField * adjacentSize > totalMoving) { newPerField--; }
+		rest = totalMoving - (newPerField * adjacentSize);
+		
+		for(String f : adjacent) {
+			bodycount.put(f, newPerField);
+			affectedFields.add(f);
+			affectedFieldsFar.add(f);
+		}
+		bodycount.put(field, bodycount.get(field) + rest);
+		
+		//update
+		if(updateAffectedFields) world.getGridMap().refreshPopulation(affectedFields);
+		
+		//So smart returning all lists for Whatever reason
+		ArrayList<String>[] returnLists = new ArrayList[3];
+		returnLists[0] = affectedFields;
+		returnLists[1] = affectedFieldsDirect;
+		returnLists[2] = affectedFieldsFar;
+		
+		return returnLists;
 	}
 	public void spread() {
-	
+		ArrayList<String> totalFields = (ArrayList<String>) Arrays.asList(bodycount.keySet().toArray(new String[1]));
+		ArrayList<String[]> clusters = new ArrayList<>();
+		for(String f : totalFields) {
+			String[] cluster = getFieldCluster(f, 0);
+			
+			//only add cluster if it isn't already in there
+			boolean contains = false;
+			for(String[] ar : clusters) {
+				if(Entity.ArrayToString(ar).equals(Entity.ArrayToString(cluster))) contains = true;		//Clusters are always sorted the same no matter the startfield
+			}
+			if(contains) continue;
+			clusters.add(cluster);
+		}
+		//Sort Clusters by size
+		ArrayList<String[]> remaining = (ArrayList<String[]>) clusters.clone(), sorted = new ArrayList<>();
+		
+		for(int i = PopulationType.ALL.length-1; i >= 0; i--) {			//All different PopulationTypes; Decreasing
+			for (String[] clust : (ArrayList<String[]>) remaining.clone()) {
+				if (clust[0] == null) {
+					clusters.remove(clust);
+					remaining.remove(clust);
+					continue;
+				}
+				if (PopulationType.ALL[i] == PopulationType.parseType(bodycount.get(clust[0]))) {						//TODO maybe add sorting by Size as well
+					sorted.add(clust);
+					remaining.remove(clust);
+				}
+			}
+		}
+		
+		//spread it
+		ArrayList<String> update = new ArrayList<>();
+		for (String[] clust : clusters) {
+			for(String ar : spread(clust[0], constants.HumanSpreadPercentage, (clust.length/10)+1, false)[0]) {
+				if(update.contains(ar)) update.add(ar);
+			}
+		}
+		world.getGridMap().refreshPopulation(update);
 	}
 
 }

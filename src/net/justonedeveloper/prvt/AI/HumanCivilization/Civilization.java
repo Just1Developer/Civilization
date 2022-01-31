@@ -1,6 +1,5 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization;
 
-import net.justonedeveloper.prvt.AI.HumanCivilization.entity.Entity;
 import net.justonedeveloper.prvt.AI.HumanCivilization.object.CityNames;
 import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.HumanProperty;
@@ -8,7 +7,6 @@ import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.Populatio
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.Log;
 
 import java.io.IOException;
-import java.util.Random;
 
 public class Civilization {
 	
@@ -43,6 +41,7 @@ public class Civilization {
 		while (true) {
 			HumanEntity.birthCycle();
 			HumanEntity.advanceAge();
+			HumanEntity.spreadHumans();
 			System.out.println("Generation: " + generation + "; Current Population: " + HumanEntity.totalPopulation() + "; Total HumanEntites: " + HumanEntity.allHumans.size());
 			generation++;
 			try {

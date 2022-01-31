@@ -1,5 +1,6 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization.entity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -68,6 +69,14 @@ public class Entity {
 	
 	public static int randomInt(int min, int max) {		//Both values inclusive
 		return r.nextInt(max - min + 1) + min;
+	}
+	
+	public static String[] ConvertToStringArray(ArrayList<String> s) {
+		String[] n = new String[s.size()];
+		for(int i = 0; i < s.size(); i++) {
+			n[i] = s.get(i);
+		}
+		return n;
 	}
 	
 }
