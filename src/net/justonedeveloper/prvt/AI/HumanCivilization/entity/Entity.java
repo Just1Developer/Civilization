@@ -23,7 +23,7 @@ public class Entity {
 		int match = 0, len = Array1.length;
 		if(Array2.length < Array1.length) len = Array2.length;	//Take length of shorter Array
 		for(int i = 0; i < len; i++) {
-			if(Array1[i].equals(Array2[i])) match++;
+			if(Array1[i] != null && Array1[i].equals(Array2[i])) match++;
 		}
 		return match;
 	}

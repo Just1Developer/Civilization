@@ -1,5 +1,6 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties;
 
+import net.justonedeveloper.prvt.AI.HumanCivilization.entity.Entity;
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.Log;
 import net.justonedeveloper.prvt.AI.HumanCivilization.util.constants;
 import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
@@ -37,7 +38,7 @@ public interface HumanProperty {
 
 		//Population Preference
 		if(probability(constants.percInherit) && parent != null
-				&& parent.getPrefPopulation() != null) props[0] = parent.getPrefPopulation();
+				&& parent.getPrefPopulation() != null) props[1] = parent.getPrefPopulation();
 		else props[1] = getRandomPopulationPreference();
 
 		//Population Density Preference

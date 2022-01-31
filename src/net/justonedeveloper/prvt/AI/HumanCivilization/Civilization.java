@@ -1,5 +1,6 @@
 package net.justonedeveloper.prvt.AI.HumanCivilization;
 
+import net.justonedeveloper.prvt.AI.HumanCivilization.entity.Entity;
 import net.justonedeveloper.prvt.AI.HumanCivilization.object.CityNames;
 import net.justonedeveloper.prvt.AI.HumanCivilization.entity.HumanEntity;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.properties.HumanProperty;

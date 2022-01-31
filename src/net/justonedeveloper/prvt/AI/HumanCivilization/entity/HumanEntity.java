@@ -155,6 +155,24 @@ public class HumanEntity extends Entity {
 	}
 	
 	//Kill People on all Fields equally
+	public HumanEntity dieOfAge(long amount, int age/*, boolean killRest If the method should kill more if */) {
+		/*if(killRest) {
+			long rest = amount, currentPeople = this.age.get(age);
+			int offset = 0;
+			while(totalBodycount > 0 && rest > 0 && (age-offset >= 0 || age+offset <= constants.maxAge)) {
+				if(currentPeople > rest) {
+				
+				}
+				offset++;
+				currentPeople = this.age.get(age+offset) + this.age.get(age-offset);
+			}
+		} else {*/
+			die(amount);
+			if(this.age.get(age) <= amount) this.age.remove(age);
+			else this.age.put(age, this.age.get(age) - amount);
+//		}
+		return this;
+	}
 	public HumanEntity die(long amount) {
 		int index = 0, max = bodycount.size(); long rest = amount, amountPerRun;
 		String[] fields = bodycount.keySet().toArray(new String[0]);
@@ -178,16 +196,11 @@ public class HumanEntity extends Entity {
 	}
 	public HumanEntity die(String Field, long amount) {
 		if(World.currentWorld.getGridMap().FieldExists(Field)) {
-			Log.log("KILL-DEBUG", "Field " + Field + " exists.");
 			long current = 0;
 			if(bodycount.containsKey(Field)) current = bodycount.get(Field);
-			Log.log("KILL-DEBUG", "long current = " + current);
 			
-			Log.log("KILL-DEBUG", "Altering Population: " + World.currentWorld.getGridMap().getFieldPopulation(Field));
 			World.currentWorld.getGridMap().alterPopulation(Field, -amount);
 			totalBodycount -= amount;
-			
-			Log.log("KILL-DEBUG", "Altered Population: " + World.currentWorld.getGridMap().getFieldPopulation(Field));
 			
 			if(bodycount.get(Field) <= amount) {
 				long rest = amount - bodycount.get(Field);
@@ -269,7 +282,6 @@ public class HumanEntity extends Entity {
 			 * 2. Wert darunter nehmen und in die aktuelle Stelle einfügen (eig. unnötig, da vom letzen Schritt gedeckt.)
 			 * 3. Am Ende die "Neugeborenen" hinzufügen
 			*/
-			//For Debugging: Log.log("DEBUG", "Amount Humans with Age 0: " + age.get(0));
 
 			age.put(c+1, age.get(c));
 			if((age.get(c-1) == null || age.get(c-1) == 0) && c > 0) age.remove(c);		//If the age below doesn't exist, it won't be overridden in the next run, so we do it here
@@ -290,12 +302,14 @@ public class HumanEntity extends Entity {
 			if(!age.containsKey(a)) continue;
 			
 			long dead = constants.getDeadPeople(age.get(a), dieProb);
-			Log.log("TESTING", dead + " People succumbed to old age at rate " + dieProb + " (Age " + a + " | Total before: " + age.get(a) + ")");
-			die(dead);
+			Log.log("OLD AGE", dead + " People succumbed to old age at rate " + dieProb + " (Age " + a + " | Total before: " + age.get(a) + ")");
+			dieOfAge(dead, a);
 		}
 	}
 
 	public String[] getFieldCluster(String field, int tolerance) {
+		long pop = world.getGridMap().getFieldPopulation(field);
+		
 		return null;
 	}
 
@@ -303,6 +317,7 @@ public class HumanEntity extends Entity {
 		String[] fields = getFieldCluster(field, 0);
 		//Equalize inside in range of City Type (Don't change city type) (Add all, )
 		String[] adjacent = world.getGridMap().getAdjacentFields(fields, range);
+		int currentFieldsSize = fields.length, adjacentSize = adjacent.length;
 		//spread
 	}
 	public void spread() {
