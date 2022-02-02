@@ -15,8 +15,15 @@ public class CityObject {
 	
 	public static ArrayList<String> diff(ArrayList<String> sample, ArrayList<String> control) {	//returns everything thats in the first arraylist but not the second
 		ArrayList<String> ret = new ArrayList<>();
-		
+		for(String s : sample) {
+			if(!control.contains(s)) ret.add(s);
+		}
 		return ret;
+	}
+
+	public void updateCityObjects() {
+		ArrayList<CityObject> old = CityObject.cityObjects;
+
 	}
 
 
