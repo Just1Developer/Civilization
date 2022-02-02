@@ -3,12 +3,10 @@ package net.justonedeveloper.prvt.AI.HumanCivilization.object;
 import net.justonedeveloper.prvt.AI.HumanCivilization.GridMap;
 import net.justonedeveloper.prvt.AI.HumanCivilization.World;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
-import net.justonedeveloper.prvt.AI.HumanCivilization.enums.UUID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class CityObject {
 	
@@ -17,8 +15,15 @@ public class CityObject {
 	
 	public static ArrayList<String> diff(ArrayList<String> sample, ArrayList<String> control) {	//returns everything thats in the first arraylist but not the second
 		ArrayList<String> ret = new ArrayList<>();
-		
+		for(String s : sample) {
+			if(!control.contains(s)) ret.add(s);
+		}
 		return ret;
+	}
+
+	public void updateCityObjects() {
+		ArrayList<CityObject> old = CityObject.cityObjects;
+
 	}
 
 

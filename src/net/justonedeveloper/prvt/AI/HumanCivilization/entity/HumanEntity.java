@@ -447,4 +447,12 @@ public class HumanEntity extends Entity {
 		world.getGridMap().refreshPopulation(update);
 	}
 
+	public void moveToNewCity() {
+
+	}
+
+	public void createNewCity() {
+
+	}
+
 }
