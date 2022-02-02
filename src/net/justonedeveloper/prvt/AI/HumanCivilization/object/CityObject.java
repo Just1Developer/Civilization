@@ -3,12 +3,10 @@ package net.justonedeveloper.prvt.AI.HumanCivilization.object;
 import net.justonedeveloper.prvt.AI.HumanCivilization.GridMap;
 import net.justonedeveloper.prvt.AI.HumanCivilization.World;
 import net.justonedeveloper.prvt.AI.HumanCivilization.enums.PopulationType;
-import net.justonedeveloper.prvt.AI.HumanCivilization.enums.UUID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class CityObject {
 	
@@ -39,7 +37,7 @@ public class CityObject {
 		create(startingField, lowerBound, upperBound);
 	}
 	private void create(String field, int lowerBound, int upperBound) {
-		UUID = net.justonedeveloper.prvt.AI.HumanCivilization.enums.UUID.generate();
+		UUID = net.justonedeveloper.prvt.AI.HumanCivilization.util.UUID.generate();
 		fields.add(field);
 		CityType = PopulationType.parseType(updatePopulation());
 		updateFields();

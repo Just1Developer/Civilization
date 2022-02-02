@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Entity {
 	
-	private final String UUID = net.justonedeveloper.prvt.AI.HumanCivilization.enums.UUID.generate();
+	private final String UUID = net.justonedeveloper.prvt.AI.HumanCivilization.util.UUID.generate();
 	
 	public Entity() {
 		
