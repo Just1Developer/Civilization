@@ -152,10 +152,8 @@ public class GridMap {
 	public String[] getFieldCluster(String Field, int tolerance, ArrayList<String> exclude) {
 		
 		ArrayList<String> fields = new ArrayList<>();
-		GridMap g = World.currentWorld.getGridMap();
 		
 		if(Field == null) return ConvertToStringArray(fields);
-		if(g == null) return ConvertToStringArray(fields);
 		if(exclude == null) exclude = new ArrayList<>();
 		
 		//variables
@@ -164,7 +162,7 @@ public class GridMap {
 		PopulationType CityType = PopulationType.parseType(getFieldPopulation(Field));
 		
 		//Integers
-		int x_offset = 1, y_offset = 0, coordX = Integer.parseInt(Field.split("x")[0]), coordY = Integer.parseInt(Field.split("x")[1]), count = 0, max = g.getSize()*g.getSize();
+		int x_offset = 1, y_offset = 0, coordX = Integer.parseInt(Field.split("x")[0]), coordY = Integer.parseInt(Field.split("x")[1]), count = 0, max = size*size;
 		int fails = 0;		//Formula for Radius: pi*r² -> 3.5*x_offset*x_offset
 		
 		while(count < max) {
@@ -172,10 +170,10 @@ public class GridMap {
 			for(int iX = -1; iX < 2; iX++) {
 				for(int iY = -1; iY < 2; iY++) {
 					final String field = (coordX + (x_offset * iX)) + "x" + (coordY + (y_offset * iY));
-					if (g.FieldExists(field)) {
+					if (FieldExists(field)) {
 						
-						if(PopulationType.isInBounds(g.getFieldPopulation(field), CityType, new int[] {-tolerance, tolerance}) && !newFields.contains(field) &&
-								!exclude.contains(PopulationType.parseType(g.getFieldPopulation(field)))) {
+						if(PopulationType.isInBounds(getFieldPopulation(field), CityType, new int[] {-tolerance, tolerance}) && !newFields.contains(field) &&
+								!exclude.contains(PopulationType.parseType(getFieldPopulation(field)))) {
 							
 							newFields.add(field);
 							fails = 0;
@@ -216,11 +214,8 @@ public class GridMap {
 		return (populationFields.containsKey(Field) || fields.containsKey(Field));
 	}
 	
-	public EnvironmentType getField(int x, int y) {
-		if(x < size && x >= 0 && y < size && y >= 0) {
-			String coords = x + "x" + y;
-			if(fields.containsKey(coords)) return (EnvironmentType) fields.get(coords);
-		}
+	public EnvironmentType getFieldEnvType(String Field) {
+		if(fields.containsKey(Field)) return (EnvironmentType) fields.get(Field);
 		return null;
 	}
 

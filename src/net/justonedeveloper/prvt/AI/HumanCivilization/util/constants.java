@@ -8,7 +8,7 @@ public class constants {
 	minimumBirthAge = 25, maximumBirthAge = 48, minimumHighBirthAge = 30, maximumHighBirthAge = 38,
 	dieOfAgeLvl1 = 75, dieOfAgeLvl2 = 85, dieOfAgeLvl3 = 100, maxAge = 120,
 	DensityToleranceMin = 10, DensityToleranceMax = 70,
-	HumanSpreadPercentage = 20;
+	HumanSpreadPercentage = 20, maximumPercentMoveAtOnce = 50;
 	
 	/**
 	 * Death Probablilties

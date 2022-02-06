@@ -21,12 +21,82 @@ public class CityObject {
 		return ret;
 	}
 
-	public void updateCityObjects() {
-		ArrayList<CityObject> old = CityObject.cityObjects;
-
+	public static void updateCityObjects() {
+		ArrayList<CityObject> newObj = new ArrayList<>();
+		for(CityObject o : cityObjects) {
+			if(o.updateFields().size() > 0) newObj.add(o);
+		}
+		cityObjects = newObj;
 	}
-
-
+	
+	public static CityObject getCityObjectFromField(String Field) {
+		for(CityObject o : cityObjects) {
+			if(o.updateFields().contains(Field)) return o;
+		}
+		return null;
+	}
+	
+	public CityObject getClosestCityFromField(String Field, PopulationType CityType, int tolerance) {
+		
+		CityObject thisObj = getCityObjectFromField(Field);
+		
+		GridMap g = World.currentWorld.getGridMap();
+		
+		if(g == null) return null;
+		
+		//variables
+		ArrayList<String> checkedFields = new ArrayList<>();
+		checkedFields.add(Field);
+		
+		//Integers
+		int x_offset = 1, y_offset = 0, coordX = Integer.parseInt(Field.split("x")[0]), coordY = Integer.parseInt(Field.split("x")[1]), count = 0, max = g.getSize()*g.getSize();
+		int fails = 0;		//Formula for Radius: pi*r² -> 3.5*x_offset*x_offset
+		
+		while(count < max) {
+			
+			for(int iX = -1; iX < 2; iX++) {
+				for(int iY = -1; iY < 2; iY++) {
+					final String field = (coordX + (x_offset * iX)) + "x" + (coordY + (y_offset * iY));
+					if (g.FieldExists(field)) {
+						
+						if(PopulationType.isInBounds(g.getFieldPopulation(field), CityType, new int[] {-tolerance, tolerance}) && !checkedFields.contains(field) &&
+								!exclude.contains(PopulationType.parseType(g.getFieldPopulation(field)))) {
+							
+							if(!getCityObjectFromField(field).equals(thisObj)) return getCityObjectFromField(field);
+							
+						}
+						checkedFields.addAll(getCityObjectFromField(field).updateFields());
+					} else fails++;
+				}
+			}
+			if(y_offset < x_offset) y_offset++;
+			else x_offset++;
+			
+			if(3.5*x_offset*x_offset <= fails) break;
+			
+			count++;
+			
+		}
+		return null;
+	}
+	
+	/*public static CityObject[] sortedBySize() {
+		CityObject[] obj = new CityObject[1];
+		for(CityObject o : cityObjects) {
+			o.updateFields();
+			
+			if(obj.length == 1 && obj[0] == null) {
+				obj[0] = o;
+				continue;
+			}
+			
+			for(CityObject o2 : obj) {
+			
+			}
+		}
+	}*/
+	
+	
 	//------------NON-STATIC CITY OBJECT------------
 
 
